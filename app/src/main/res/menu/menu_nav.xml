@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <group android:checkableBehavior="single">
+
+            <item android:id="@+id/nav_home"
+                android:title="@string/home"
+                android:icon="@drawable/ic_home"/>
+
+            <item android:id="@+id/nav_calendar"
+                android:title="@string/calendar"
+                android:icon="@drawable/ic_calendar"/>
+
+            <item android:id="@+id/nav_attendance"
+                android:title="@string/attendance"
+                android:icon="@drawable/ic_qr_code"/>
+
+            <item android:id="@+id/nav_chat"
+                android:title="@string/chat"
+                android:icon="@drawable/ic_message"/>
+
+            <item android:id="@+id/nav_notification"
+                android:title="@string/notification"
+                android:icon="@drawable/ic_notifications"/>
+
+        </group>
+
+    <item android:title="@string/account">
+        <menu>
+            <item android:id="@+id/nav_account"
+                android:title="@string/account"
+                android:icon="@drawable/ic_account"/>
+            <item android:id="@+id/nav_change_pass"
+                android:title="@string/resetpassword"
+                android:icon="@drawable/ic_password"/>
+        </menu>
+    </item>
+</menu>

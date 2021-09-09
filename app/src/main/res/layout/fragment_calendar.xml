@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.CalendarFragment"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+    <com.applandeo.materialcalendarview.CalendarView
+        android:id="@+id/calendarViewEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:headerLabelColor="@color/black"
+        android:scrollbars="none"
+        app:type="one_day_picker"
+        app:eventsEnabled="true"
+        app:headerColor="@color/white"
+        app:selectionColor="#00BCD4"
+        app:selectionLabelColor="@color/white"
+        todayLabelColor="#00BCD4"
+        app:previousButtonSrc="@drawable/ic_previous"
+        app:forwardButtonSrc="@drawable/ic_next"
+        app:maximumDaysRange="31"
+        android:scrollIndicators="none"
+        android:layout_above="@id/layout_schedule"
+        android:layout_marginBottom="10dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/layout_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        app:cardCornerRadius="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="#00BCD4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_event"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="--School--"/>
+
+            <LinearLayout
+                android:id="@+id/ll_detailclass"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/txt_tBatdau"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="#FFF"
+                        android:text="212"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_expand_more_24"/>
+
+                    <TextView
+                        android:id="@+id/txt_tKetthuc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="#FFF"
+                        android:text="1212"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="wrap_content"
+                    android:background="#FFF"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/txt_tenlop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="#FFF"
+                        android:textSize="16sp"
+                        android:text="Android nâng cao"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="("
+                            android:textStyle="bold"
+                            android:textColor="#FFF"
+                            android:textAlignment="viewStart"/>
+                        <TextView
+                            android:id="@+id/txt_phonghoc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="#FFF"
+                            android:textAlignment="viewStart"
+                            android:text="L03"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=")"
+                            android:textStyle="bold"
+                            android:textColor="#FFF"
+                            android:textAlignment="viewStart"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/recycler_event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>
