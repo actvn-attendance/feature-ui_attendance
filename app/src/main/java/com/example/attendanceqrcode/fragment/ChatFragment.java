@@ -1,66 +1,57 @@
 package com.example.attendanceqrcode.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.attendanceqrcode.ChatDetailActivity;
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.adapter.GroupChatAdapter;
+import com.example.attendanceqrcode.model.GroupChat;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChatFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ChatFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickChatGroup {
+    RecyclerView recyclerViewGroupChat;
+    GroupChatAdapter groupChatAdapter;
+    List<GroupChat> groupChatList ;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ChatFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1, String param2) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        recyclerViewGroupChat = view.findViewById(R.id.recycleGroupChat);
+        initData();
+        groupChatAdapter = new GroupChatAdapter(getActivity(),groupChatList,this);
+        recyclerViewGroupChat.setAdapter(groupChatAdapter);
+
+
+        return view;
+    }
+
+    private void initData()
+    {
+        groupChatList = new ArrayList<>();
+        groupChatList.add(new GroupChat("Android nang cao","Thay Cuong",R.drawable.image_group_chat));
+        groupChatList.add(new GroupChat("Toi uu phan mem","Thay Cuong",R.drawable.image_group_chat));
+        groupChatList.add(new GroupChat("An toan thong tin","Thay Cuong",R.drawable.image_group_chat));
+        groupChatList.add(new GroupChat("Java card","Thay Cuong",R.drawable.image_group_chat));
+
+    }
+
+    @Override
+    public void onClickItem() {
+        Intent intent  = new Intent(getActivity(),ChatDetailActivity.class);
+        startActivity(intent);
     }
 }

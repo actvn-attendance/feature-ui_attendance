@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/bottom_home"
-        android:title="@string/home"
-        android:icon="@drawable/ic_home"/>
-
     <item android:id="@+id/bottom_calendar"
         android:title="@string/calendar"
         android:icon="@drawable/ic_calendar"/>
-
+    <item android:id="@+id/bottom_class"
+        android:title="@string/classroom"
+        android:icon="@drawable/ic_class"/>
     <item android:id="@+id/bottom_attendance"
-        android:title="@string/attendance"
-        android:icon="@drawable/ic_qr_code"/>
+        android:title=""/>
 
     <item android:id="@+id/bottom_chat"
         android:title="@string/chat"

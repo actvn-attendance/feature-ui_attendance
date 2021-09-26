@@ -15,14 +15,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.attendanceqrcode.fragment.AccountFragment;
 import com.example.attendanceqrcode.fragment.AttendanceFragment;
 import com.example.attendanceqrcode.fragment.CalendarFragment;
 import com.example.attendanceqrcode.fragment.ChatFragment;
-import com.example.attendanceqrcode.fragment.HomeFragment;
+import com.example.attendanceqrcode.fragment.ClassFragment;
 import com.example.attendanceqrcode.fragment.NotificationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -34,15 +36,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
+    FloatingActionButton floatingActionButton;
 
-    private static final int FRAGMENT_HOME = 0;
-    private static final int FRAGMENT_CALENDAR = 1;
-    private static final int FRAGMENT_ATTENDANCE = 2;
+    private static final int FRAGMENT_CALENDAR = 0;
+    private static final int FRAGMENT_CLASS = 1;
     private static final int FRAGMENT_CHAT = 3;
     private static final int FRAGMENT_NOTIFICATION = 4;
     private static final int FRAGMENT_ACCOUNT = 5;
-
-    private int currentFragment = FRAGMENT_HOME;
+    private int currentFragment = FRAGMENT_CALENDAR;
 
 
 
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolBar);
         navigationView = findViewById(R.id.navigation_view);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        floatingActionButton = findViewById(R.id.fab);
+        bottomNavigationView.setBackground(null);
 
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
@@ -65,27 +68,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        replaceFragment(new HomeFragment());
-        navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
-        bottomNavigationView.getMenu().findItem(R.id.bottom_home).setChecked(true);
+        replaceFragment(new CalendarFragment());
+        navigationView.getMenu().findItem(R.id.nav_calendar).setChecked(true);
+        bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull  MenuItem item) {
                 int id = item.getItemId();
-                if (id == R.id.bottom_home)
-                {
-                    openFragment(FRAGMENT_HOME,new HomeFragment());
-                    navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
-                }else if (id == R.id.bottom_calendar)
+                if (id == R.id.bottom_calendar)
                 {
                     openFragment(FRAGMENT_CALENDAR,new CalendarFragment());
                     navigationView.getMenu().findItem(R.id.nav_calendar).setChecked(true);
-                }else if (id == R.id.bottom_attendance)
+                }
+                else if (id == R.id.bottom_class)
                 {
-                    openFragment(FRAGMENT_ATTENDANCE,new AttendanceFragment());
-                    navigationView.getMenu().findItem(R.id.nav_attendance).setChecked(true);
-                }else if (id == R.id.bottom_chat)
+                    openFragment(FRAGMENT_CLASS,new ClassFragment());
+                    navigationView.getMenu().findItem(R.id.nav_class).setChecked(true);
+                } else if (id == R.id.bottom_chat)
                 {
                     openFragment(FRAGMENT_CHAT,new ChatFragment());
                     navigationView.getMenu().findItem(R.id.nav_chat).setChecked(true);
@@ -98,6 +98,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScanQrCode();
+            }
+        });
+
 
     }
 
@@ -105,18 +112,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull  MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_home){
-            openFragment(FRAGMENT_HOME,new HomeFragment());
-            bottomNavigationView.getMenu().findItem(R.id.bottom_home).setChecked(true);
-
-        }else if (id == R.id.nav_calendar)
+        if (id == R.id.nav_calendar)
         {
             openFragment(FRAGMENT_CALENDAR,new CalendarFragment());
             bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
-        }else if (id == R.id.nav_attendance)
-        {
-            openFragment(FRAGMENT_ATTENDANCE,new AttendanceFragment());
-            bottomNavigationView.getMenu().findItem(R.id.bottom_attendance).setChecked(true);
+        }else if (id == R.id.nav_class){
+            openFragment(FRAGMENT_CLASS,new ClassFragment());
+            bottomNavigationView.getMenu().findItem(R.id.bottom_class).setChecked(true);
+
         }else if (id == R.id.nav_chat)
         {
            openFragment(FRAGMENT_CHAT,new ChatFragment());
@@ -169,6 +172,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+    }
+
+    public void ScanQrCode()
+    {
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setCaptureActivity(CaptureAct.class);
+        intentIntegrator.setOrientationLocked(false);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        intentIntegrator.setPrompt("Scanning Code");
+        intentIntegrator.initiateScan();
 
     }
 

@@ -2,17 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <group android:checkableBehavior="single">
 
-            <item android:id="@+id/nav_home"
-                android:title="@string/home"
-                android:icon="@drawable/ic_home"/>
-
             <item android:id="@+id/nav_calendar"
                 android:title="@string/calendar"
                 android:icon="@drawable/ic_calendar"/>
-
-            <item android:id="@+id/nav_attendance"
-                android:title="@string/attendance"
-                android:icon="@drawable/ic_qr_code"/>
+            <item android:id="@+id/nav_class"
+                android:title="@string/classroom"
+                android:icon="@drawable/ic_class"/>
 
             <item android:id="@+id/nav_chat"
                 android:title="@string/chat"

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.AttendanceFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:visibility="gone">
 
     <Button
         android:layout_marginTop="20dp"
@@ -17,7 +18,7 @@
         android:background="@drawable/bg_buttonlogin"
         android:textColor="@color/white"
         android:paddingHorizontal="20dp"
-        android:drawableLeft="@drawable/ic_qr_code"/>
+        android:drawableLeft="@drawable/ic_qr_code" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

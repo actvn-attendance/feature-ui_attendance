@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+    <RelativeLayout
+        android:id="@+id/rl_item_notifi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imgeNotifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_qr_code"
+            android:layout_centerVertical="true"/>
+        <LinearLayout
+            android:layout_toEndOf="@id/imgeNotifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvContentNotifi"
+                android:text="Ma diem danh lop Android da duoc tao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvDateNotifi"
+                android:text="15-10-2021 - 15:00"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:textSize="12dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/ic_dot"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
