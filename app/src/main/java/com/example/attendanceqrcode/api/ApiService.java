@@ -25,22 +25,19 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
-
-
-
     Gson gson = new GsonBuilder()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://4c27-27-72-105-40.ngrok.io/")
+            .baseUrl("http://0456-27-72-105-40.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(AddLoggingInterceptor.setLogging())
             .build()
             .create(ApiService.class);
 
-
     //Phuong thuc post(lấy thuộc tính cua account)
     @POST("api/auth/signin/student")
-    Call<InfoUser> sendAccount (@Body User user );
+    Call<InfoUser> sendAccount(@Body User user);
 
     //phuong thuc get(lay lich hoc)
     @GET("api/schedule")
@@ -74,11 +71,12 @@ public interface ApiService {
     //phuong thuc get(lay thong ke diem danh)
     @GET("api/attendance/history-attendance-user")
     Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
-                                                           @Query("classroom_id") int classroom_id );
+                                                           @Query("classroom_id") int classroom_id);
+
     //phuong thuc get(lay diem cua lop)
     @GET("api/scores/get-scores")
     Call<List<InfoScores>> getInfoScores(@Header("Authorization") String accessToken,
-                                         @Query("classroom_id") int classroom_id );
+                                         @Query("classroom_id") int classroom_id);
 
 
 }
