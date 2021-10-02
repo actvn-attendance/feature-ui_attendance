@@ -29,7 +29,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://0456-27-72-105-40.ngrok.io/")
+            .baseUrl("http://6daf-2001-ee0-41c1-90e9-583-1f27-ec9f-26cb.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()

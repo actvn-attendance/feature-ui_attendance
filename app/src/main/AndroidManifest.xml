@@ -17,12 +17,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.AttendanceQrCode">
+        android:theme="@style/Theme.AttendanceQrCode"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".AttendanceStatusActivity"></activity>
         <activity
             android:name=".HistoryAttendanceActivity"
             android:exported="true" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
