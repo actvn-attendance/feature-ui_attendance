@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/drawable/custom_bg_item_history_attendance.xml" value="0.20416666666666666" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/drawable/ic_baseline_brightness_1_24.xml" value="0.25416666666666665" />
+        <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/drawable/ic_baseline_qr_code_scanner_24.xml" value="0.2635416666666667" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/drawable/ic_dot.xml" value="0.2791666666666667" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/drawable/ic_fail.xml" value="0.20416666666666666" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/drawable/ic_home.xml" value="0.2635416666666667" />
@@ -12,11 +13,13 @@
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/activity_dang_nhap.xml" value="0.2296875" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/activity_detail_attendance_statistics.xml" value="0.18802083333333333" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/activity_history_attendance.xml" value="0.18802083333333333" />
+        <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/activity_main.xml" value="0.20625271385149804" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/custom_item_class.xml" value="0.24739583333333334" />
+        <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/custom_item_event.xml" value="0.2630208333333333" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/custom_item_history_attendance.xml" value="0.18802083333333333" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/custom_item_notification.xml" value="0.1" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/fragment_attendance.xml" value="0.23981481481481481" />
-        <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/fragment_calendar.xml" value="0.2630208333333333" />
+        <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/fragment_calendar.xml" value="0.24739583333333334" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/fragment_class.xml" value="0.1" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/fragment_home.xml" value="0.23981481481481481" />
         <entry key="..\:/android_advanced/feature-ui_attendance/app/src/main/res/layout/fragment_notification.xml" value="0.2074074074074074" />
