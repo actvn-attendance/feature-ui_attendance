@@ -209,8 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (location.getLongitude() == 0.0 || location.getLongitude() == 0.0) {
                         location = Utils.getLocation(MainActivity.this);
                     }
-//                    System.out.println(">>>>>>>: " + location.getLatitude());
-//                    System.out.println(">>>>>>>: " + location.getLongitude());
+                    assert location != null;
                     if (location != null && Utils.checkDistanceAttendance(location.getLatitude(), location.getLongitude(), qrcodeUser)) {
                         // success gps
                         // as well as attendance successfully
@@ -244,8 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                     @Override
                                     public void onFailure(@NotNull Call<ResponseAttendance> call, Throwable t) {
-                                        Toast.makeText(MainActivity.this, "Điểm danh thất bại !" + t.toString(),
-                                                Toast.LENGTH_LONG).show();
+                                        showFailureDialog("Đã xảy ra lỗi");
                                     }
                                 });
 

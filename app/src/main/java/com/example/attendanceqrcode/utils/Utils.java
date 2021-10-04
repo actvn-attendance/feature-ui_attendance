@@ -75,6 +75,8 @@ public class Utils {
         } else {
             gpsTracker.showSettingsAlert();
         }
+        System.out.println(">>> lat: " + gpsTracker.getLatitude());
+        System.out.println(">>> long: " + gpsTracker.getLongitude());
         return null;
     }
 }

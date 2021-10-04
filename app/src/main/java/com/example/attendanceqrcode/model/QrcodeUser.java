@@ -46,7 +46,7 @@ public class QrcodeUser {
             jsonObject.put("qrCodeId", getQrCodeId());
             jsonObject.put("latitude", getLatitude());
             jsonObject.put("longitude", getLongitude());
-            jsonObject.put("imei", getImei());
+            jsonObject.put("androidId", getImei());
             System.out.println(jsonObject.toString());
             return jsonObject.toString();
         } catch (JSONException e) {
