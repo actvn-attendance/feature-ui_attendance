@@ -31,8 +31,8 @@
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/appbar_layout"
-            android:layout_above="@+id/coordinator_layout" />
+            android:layout_above="@+id/coordinator_layout"
+            android:layout_below="@+id/appbar_layout" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator_layout"
@@ -67,8 +67,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_qr_code"
+                android:src="@drawable/ic_baseline_qr_code_scanner_24"
+                app:rippleColor="@color/white"
                 app:layout_anchor="@id/bottomAppBar"
+                android:outlineAmbientShadowColor="@color/white"
+                android:outlineSpotShadowColor="@color/white"
+                android:backgroundTint="@color/background"
+                android:background="@color/background"
                 />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -81,7 +86,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/layout_header_navigation"
-        app:menu="@menu/menu_nav" />
+        app:menu="@menu/menu_nav"
+        android:visibility="visible"/>
 
 
 

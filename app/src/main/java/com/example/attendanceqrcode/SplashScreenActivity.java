@@ -4,12 +4,15 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class SplashScreenActivity extends AppCompatActivity {
     ProgressBar progressBar;
@@ -56,5 +59,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             animation.start();
         }
     }
+
 
 }

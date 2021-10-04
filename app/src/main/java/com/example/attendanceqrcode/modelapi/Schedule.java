@@ -1,44 +1,68 @@
 package com.example.attendanceqrcode.modelapi;
 
 public class Schedule {
-    private int id;
+    private int schedule_id;
+    private String start_lesson;
+    private String lesson;
+    private String end_lesson;
     private String start_time;
     private String end_time;
-    private String start_lesson;
-    private String end_lesson;
-    private String  lesson;
     private String datetime;
 
-    private String create_date;
-    private String update_date;
-    private String update_user;
-    private int active_flg;
-    private int address_id;
+    private int classroom_id;
+    private String classroom_name;
+    private String subject_name;
+    private String address_name;
+    private String teacher_name;
 
     public Schedule() {
     }
 
-    public Schedule(int id, String start_time, String end_time, String start_lesson, String end_lesson, String lesson, String datetime, String create_date, String update_date, String update_user, int active_flg, int address_id) {
-        this.id = id;
+    public Schedule(int schedule_id, String start_lesson, String lesson, String end_lesson, String start_time, String end_time, String datetime, int classroom_id, String classroom_name, String subject_name, String address_name, String teacher_name) {
+        this.schedule_id = schedule_id;
+        this.start_lesson = start_lesson;
+        this.lesson = lesson;
+        this.end_lesson = end_lesson;
         this.start_time = start_time;
         this.end_time = end_time;
-        this.start_lesson = start_lesson;
-        this.end_lesson = end_lesson;
-        this.lesson = lesson;
         this.datetime = datetime;
-        this.create_date = create_date;
-        this.update_date = update_date;
-        this.update_user = update_user;
-        this.active_flg = active_flg;
-        this.address_id = address_id;
+        this.classroom_id = classroom_id;
+        this.classroom_name = classroom_name;
+        this.subject_name = subject_name;
+        this.address_name = address_name;
+        this.teacher_name = teacher_name;
     }
 
-    public int getId() {
-        return id;
+    public int getSchedule_id() {
+        return schedule_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSchedule_id(int schedule_id) {
+        this.schedule_id = schedule_id;
+    }
+
+    public String getStart_lesson() {
+        return start_lesson;
+    }
+
+    public void setStart_lesson(String start_lesson) {
+        this.start_lesson = start_lesson;
+    }
+
+    public String getLesson() {
+        return lesson;
+    }
+
+    public void setLesson(String lesson) {
+        this.lesson = lesson;
+    }
+
+    public String getEnd_lesson() {
+        return end_lesson;
+    }
+
+    public void setEnd_lesson(String end_lesson) {
+        this.end_lesson = end_lesson;
     }
 
     public String getStart_time() {
@@ -57,30 +81,6 @@ public class Schedule {
         this.end_time = end_time;
     }
 
-    public String getStart_lesson() {
-        return start_lesson;
-    }
-
-    public void setStart_lesson(String start_lesson) {
-        this.start_lesson = start_lesson;
-    }
-
-    public String getEnd_lesson() {
-        return end_lesson;
-    }
-
-    public void setEnd_lesson(String end_lesson) {
-        this.end_lesson = end_lesson;
-    }
-
-    public String getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(String lesson) {
-        this.lesson = lesson;
-    }
-
     public String getDatetime() {
         return datetime;
     }
@@ -89,43 +89,43 @@ public class Schedule {
         this.datetime = datetime;
     }
 
-    public String getCreate_date() {
-        return create_date;
+    public int getClassroom_id() {
+        return classroom_id;
     }
 
-    public void setCreate_date(String create_date) {
-        this.create_date = create_date;
+    public void setClassroom_id(int classroom_id) {
+        this.classroom_id = classroom_id;
     }
 
-    public String getUpdate_date() {
-        return update_date;
+    public String getClassroom_name() {
+        return classroom_name;
     }
 
-    public void setUpdate_date(String update_date) {
-        this.update_date = update_date;
+    public void setClassroom_name(String classroom_name) {
+        this.classroom_name = classroom_name;
     }
 
-    public String getUpdate_user() {
-        return update_user;
+    public String getSubject_name() {
+        return subject_name;
     }
 
-    public void setUpdate_user(String update_user) {
-        this.update_user = update_user;
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
     }
 
-    public int getActive_flg() {
-        return active_flg;
+    public String getAddress_name() {
+        return address_name;
     }
 
-    public void setActive_flg(int active_flg) {
-        this.active_flg = active_flg;
+    public void setAddress_name(String address_name) {
+        this.address_name = address_name;
     }
 
-    public int getAddress_id() {
-        return address_id;
+    public String getTeacher_name() {
+        return teacher_name;
     }
 
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
+    public void setTeacher_name(String teacher_name) {
+        this.teacher_name = teacher_name;
     }
 }
