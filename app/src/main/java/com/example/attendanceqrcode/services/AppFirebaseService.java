@@ -35,13 +35,15 @@ public class AppFirebaseService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
+        super.onNewToken(token);
         Log.d(TAG, "Refreshed token: " + token);
-        sendRegistrationToServer(token);
+        getSharedPreferences("_", MODE_PRIVATE).edit().putString("firebase_token", token).apply();
     }
 
-    private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+    public static String getToken(Context context) {
+        return context.getSharedPreferences("_", MODE_PRIVATE).getString("firebase_token", "");
     }
+
 
     private void sendNotification(RemoteMessage remoteMessage) {
         Intent intent = new Intent(this, MainActivity.class);
