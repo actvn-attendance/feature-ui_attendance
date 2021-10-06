@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.attendanceqrcode.api.ApiService;
+import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.User;
 import com.example.attendanceqrcode.services.AppFirebaseService;
@@ -28,12 +29,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DangNhapActivity extends AppCompatActivity implements View.OnClickListener {
+public class DangNhapActivity extends BaseActivity implements View.OnClickListener {
     EditText edtUsername;
     EditText edtPassword;
     TextView txtForgetPass;
     Button btnLogin;
     ProgressBar progressBar;
+
+    @Override
+    protected void handleUnauthorizedEvent() {
+        //Don't handle unauthorized event
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

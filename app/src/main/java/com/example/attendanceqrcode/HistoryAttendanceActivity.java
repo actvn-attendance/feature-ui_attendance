@@ -9,12 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.attendanceqrcode.adapter.AdapterRecyclerHistoryAttendance;
+import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.model.HistoryAttendance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryAttendanceActivity extends AppCompatActivity {
+public class HistoryAttendanceActivity extends BaseActivity {
     ImageView btnBack;
     TextView tvHistoryAttndance;
     RecyclerView recyclerView;

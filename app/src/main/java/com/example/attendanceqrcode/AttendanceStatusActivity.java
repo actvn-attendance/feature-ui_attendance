@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class AttendanceStatusActivity extends AppCompatActivity {
+import com.example.attendanceqrcode.middleware.BaseActivity;
+
+public class AttendanceStatusActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

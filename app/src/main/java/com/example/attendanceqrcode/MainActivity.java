@@ -28,6 +28,7 @@ import com.example.attendanceqrcode.fragment.CalendarFragment;
 import com.example.attendanceqrcode.fragment.ChatFragment;
 import com.example.attendanceqrcode.fragment.ClassFragment;
 import com.example.attendanceqrcode.fragment.NotificationFragment;
+import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.model.QrcodeUser;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
 import com.example.attendanceqrcode.utils.AES;
@@ -50,7 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
     Toolbar toolbar;
