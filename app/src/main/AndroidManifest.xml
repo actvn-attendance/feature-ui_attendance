@@ -19,9 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceQrCode">
         <activity
+            android:name=".ClassDetailActivity"
+            android:exported="true" />
+        <activity
             android:name=".HistoryAttendanceActivity"
             android:exported="true" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

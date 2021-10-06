@@ -117,6 +117,7 @@ public class ClassFragment extends Fragment implements AdapterRecyclerClass.Clic
 
     @Override
     public void clickDetail() {
-
+        Intent iHistoryAttendance = new Intent(getActivity(), HistoryAttendanceActivity.class);
+        startActivity(iHistoryAttendance);
     }
 }
