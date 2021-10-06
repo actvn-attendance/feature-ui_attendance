@@ -108,22 +108,22 @@
     </RelativeLayout>
 
 
-
     <Button
         android:id="@+id/btn_login"
-        android:layout_below="@id/ll_savelogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
+        android:layout_below="@id/ll_savelogin"
         android:layout_marginTop="20dp"
+        android:backgroundTint="@color/background"
         android:text="Login"
         android:textAlignment="center"
-        android:background="@drawable/bg_buttonlogin"
-        android:textColor="@color/white"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
 
     <ProgressBar
         android:background="@drawable/bg_buttonlogin"
         android:id="@+id/processbar"
+        android:backgroundTint="@color/buttoncolor"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

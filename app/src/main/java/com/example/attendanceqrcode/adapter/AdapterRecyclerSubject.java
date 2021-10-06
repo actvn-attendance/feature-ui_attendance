@@ -11,22 +11,22 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.model.ClassRooms;
+import com.example.attendanceqrcode.modelapi.Subject;
 
 import java.util.List;
 
 
-public class AdapterRecyclerClass extends RecyclerView.Adapter<AdapterRecyclerClass.ViewHolder> {
-    List<ClassRooms> classList;
+public class AdapterRecyclerSubject extends RecyclerView.Adapter<AdapterRecyclerSubject.ViewHolder> {
+    List<Subject> subjectList;
     FragmentActivity activity;
 
-    ClickHistoryClass clickHistoryClass;
     ClickDetailClass clickDetailClass;
 
-    public AdapterRecyclerClass(List<ClassRooms> classList, FragmentActivity activity, ClickHistoryClass clickHistoryClass, ClickDetailClass clickDetailClass) {
-        this.classList = classList;
+    public AdapterRecyclerSubject(List<Subject> subjectList, FragmentActivity activity, ClickDetailClass clickDetailClass) {
+        this.subjectList = subjectList;
         this.activity = activity;
-        this.clickHistoryClass = clickHistoryClass;
         this.clickDetailClass = clickDetailClass;
         notifyDataSetChanged();
     }
@@ -42,25 +42,16 @@ public class AdapterRecyclerClass extends RecyclerView.Adapter<AdapterRecyclerCl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        ClassRooms classRoom = classList.get(position);
+        Subject subject = subjectList.get(position);
 
-        holder.txtTenLop.setText(classRoom.getName());
-//        holder.txtSoTinChi.setText(classRoom.getSubject().getNumberOfCredits()+"");
-        holder.txtMalop.setText(classRoom.getNameKD());
+        holder.txtTenLop.setText(subject.getSubject_name());
+        holder.txtMalop.setText(subject.getNumber_of_credits()+"");
 
-        holder.llHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                clickHistoryClass.clickHistory();
-
-            }
-        });
 
         holder.llDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickDetailClass.clickDetail();
+                clickDetailClass.clickDetail(subject);
             }
         });
 
@@ -68,14 +59,17 @@ public class AdapterRecyclerClass extends RecyclerView.Adapter<AdapterRecyclerCl
 
     @Override
     public int getItemCount() {
-        return classList.size();
+        if (subjectList == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog(activity);
+        }
+        return subjectList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtTenLop;
         TextView txtSoTinChi;
         TextView txtMalop;
-        LinearLayout llHistory;
         LinearLayout llDetail;
 
         public ViewHolder(@NonNull View itemView) {
@@ -84,21 +78,15 @@ public class AdapterRecyclerClass extends RecyclerView.Adapter<AdapterRecyclerCl
             txtTenLop = itemView.findViewById(R.id.txt_tenlop);
             txtSoTinChi = itemView.findViewById(R.id.txt_sotinchi);
             txtMalop = itemView.findViewById(R.id.txt_malop);
-            llHistory = itemView.findViewById(R.id.ll_history);
             llDetail = itemView.findViewById(R.id.ll_detail);
 
         }
     }
 
-    public interface ClickHistoryClass
-    {
-        void clickHistory();
-
-    }
 
     public interface ClickDetailClass
     {
-        void clickDetail();
+        void clickDetail(Subject subject);
 
     }
 }
