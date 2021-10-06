@@ -7,6 +7,7 @@ import com.example.attendanceqrcode.modelapi.InfoScores;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
 import com.example.attendanceqrcode.modelapi.Schedule;
+import com.example.attendanceqrcode.modelapi.ScheduleStudent;
 import com.example.attendanceqrcode.modelapi.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +30,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://ee06-2001-ee0-218-bb57-1060-2a11-8537-ac2e.ngrok.io/")
+            .baseUrl("http://6b4d-2001-ee0-41c1-90e9-583-1f27-ec9f-26cb.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()
@@ -41,9 +42,9 @@ public interface ApiService {
 
     //phuong thuc get(lay lich hoc)
     @GET("api/schedule")
-    Call<List<Schedule>> getSchedule(@Header("Authorization") String access_token,
-                                     @Query("start_date_time") String start_date_time,
-                                     @Query("end_date_time") String end_date_time);
+    Call<List<ScheduleStudent>> getSchedule(@Header("Authorization") String access_token,
+                                            @Query("end_date_time") String end_date_time,
+                                            @Query("start_date_time") String start_date_time);
 
 //    @GET("api/live")
 //    Call<Currency> convertUsdToVnd(@Query("access_key") String access_key,

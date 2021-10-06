@@ -10,9 +10,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +43,7 @@ import com.google.gson.JsonParser;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.jetbrains.annotations.NotNull;
+
 import org.json.JSONObject;
 
 import retrofit2.Call;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         floatingActionButton = findViewById(R.id.fab);
         bottomNavigationView.setBackground(null);
+
+        floatingActionButton.setBackgroundColor(getResources().getColor(R.color.background));
+        floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_qr_code_scanner_24));
 
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -225,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Utils.getToken(this), gsonObject)
                                 .enqueue(new Callback<ResponseAttendance>() {
                                     @Override
-                                    public void onResponse(@NotNull Call<ResponseAttendance> call, Response<ResponseAttendance> response) {
+                                    public void onResponse( Call<ResponseAttendance> call, Response<ResponseAttendance> response) {
                                         int code = response.code();
                                         System.out.println(code);
                                         if (code == 200) {
@@ -242,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
 
                                     @Override
-                                    public void onFailure(@NotNull Call<ResponseAttendance> call, Throwable t) {
+                                    public void onFailure( Call<ResponseAttendance> call, Throwable t) {
                                         showFailureDialog("Đã xảy ra lỗi");
                                     }
                                 });
