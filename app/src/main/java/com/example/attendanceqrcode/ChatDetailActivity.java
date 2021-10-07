@@ -15,12 +15,13 @@ import android.widget.ImageView;
 
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.MessageAdapter;
+import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.model.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatDetailActivity extends AppCompatActivity {
+public class ChatDetailActivity extends BaseActivity {
 
     RecyclerView recyclerChat;
     MessageAdapter messageAdapter;

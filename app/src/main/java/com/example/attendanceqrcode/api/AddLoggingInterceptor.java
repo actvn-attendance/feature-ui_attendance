@@ -1,5 +1,7 @@
 package com.example.attendanceqrcode.api;
 
+import com.example.attendanceqrcode.middleware.UnauthorizedInterceptor;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -10,6 +12,7 @@ public class AddLoggingInterceptor {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(new UnauthorizedInterceptor())
                 .build();
 
         return okHttpClient;

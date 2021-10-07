@@ -45,6 +45,16 @@ public class Utils {
         return sharedPreferences.getString("token", "");
     }
 
+    public static int getUserID(Activity activity) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
+        return sharedPreferences.getInt("uid", -1);
+    }
+
+    public static String getUserFullName(Activity activity) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("fullName", "");
+    }
+
     public static boolean checkGPSPermission(Activity activity, Context context) {
         try {
             if (ContextCompat.checkSelfPermission(context,

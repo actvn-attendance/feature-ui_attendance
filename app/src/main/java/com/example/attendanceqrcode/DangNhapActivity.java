@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.attendanceqrcode.api.ApiService;
+import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.User;
 import com.example.attendanceqrcode.services.AppFirebaseService;
@@ -29,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DangNhapActivity extends AppCompatActivity implements View.OnClickListener {
+public class DangNhapActivity extends BaseActivity implements View.OnClickListener {
     EditText edtUsername;
     EditText edtPassword;
     TextView txtForgetPass;
@@ -37,6 +38,11 @@ public class DangNhapActivity extends AppCompatActivity implements View.OnClickL
     ProgressBar progressBar;
     private long backPressdTime;
     Toast toast;
+
+    @Override
+    protected void handleUnauthorizedEvent() {
+        //Don't handle unauthorized event
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,8 @@ public class DangNhapActivity extends AppCompatActivity implements View.OnClickL
                                     editor.putString("token", postResult.getAccess_token());
                                     editor.putString("username", username);
                                     editor.putString("password", password);
+                                    editor.putInt("uid", postResult.getAccount().getAccount_id());
+                                    editor.putString("fullName", postResult.getAccount().getFull_name());
                                     editor.commit();
 
                                     Intent iHome = new Intent(DangNhapActivity.this, MainActivity.class);

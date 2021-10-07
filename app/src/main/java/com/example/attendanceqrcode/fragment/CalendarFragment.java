@@ -46,8 +46,6 @@ public class CalendarFragment extends Fragment {
     AdapterRecyclerEventCalendar adapterRecyclerEventCalendar;
     RelativeLayout rlNodata;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,39 +74,39 @@ public class CalendarFragment extends Fragment {
         ApiService.apiService.getSchedule(access_token, "2021-10-20 ", "2021-08-15").enqueue(new Callback<List<ScheduleStudent>>() {
             @Override
             public void onResponse(Call<List<ScheduleStudent>> call, Response<List<ScheduleStudent>> response) {
+                if(response.code() == 200) {
+                    scheduleStudents = response.body();
 
-                scheduleStudents = response.body();
+                    for (int k = 0; k < scheduleStudents.size(); k++) {
 
-                for (int k = 0; k < scheduleStudents.size(); k++) {
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = null;
+                        try {
+                            date = inputFormat.parse(scheduleStudents.get(k).getDatetime());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Calendar cal = Calendar.getInstance();
 
-                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date = null;
-                    try {
-                         date = inputFormat.parse(scheduleStudents.get(k).getDatetime());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        cal.setTime(date);
+                        events.add(new EventDay(cal, R.drawable.ic_baseline_brightness_1_24));
+
+                        //set event default
+                        Date currentTime = Calendar.getInstance().getTime();
+                        if (currentTime.getTime() == convertStringToDate(scheduleStudents.get(k).getDatetime()).getTime()) {
+                            rlNodata.setVisibility(View.GONE);
+                            recyclerView_event.setVisibility(View.VISIBLE);
+                            adapterRecyclerEventCalendar = new AdapterRecyclerEventCalendar(scheduleStudents.get(k).getSchedule(), getActivity());
+                            recyclerView_event.setAdapter(adapterRecyclerEventCalendar);
+
+                        } else {
+                            rlNodata.setVisibility(View.VISIBLE);
+                            recyclerView_event.setVisibility(View.GONE);
+                        }
+
                     }
-                    Calendar cal = Calendar.getInstance();
-
-                    cal.setTime(date);
-                    events.add(new EventDay(cal, R.drawable.ic_baseline_brightness_1_24));
-
-                    //set event default
-                    Date currentTime = Calendar.getInstance().getTime();
-                    if (currentTime.getTime() == convertStringToDate(scheduleStudents.get(k).getDatetime()).getTime())
-                    {
-                        rlNodata.setVisibility(View.GONE);
-                        recyclerView_event.setVisibility(View.VISIBLE);
-                        adapterRecyclerEventCalendar = new AdapterRecyclerEventCalendar(scheduleStudents.get(k).getSchedule(),getActivity());
-                        recyclerView_event.setAdapter(adapterRecyclerEventCalendar);
-
-                    }else {
-                        rlNodata.setVisibility(View.VISIBLE);
-                        recyclerView_event.setVisibility(View.GONE);
-                    }
-
+                    calendar.setEvents(events);
                 }
-                calendar.setEvents(events);
             }
             @Override
             public void onFailure(Call<List<ScheduleStudent>> call, Throwable t) {
