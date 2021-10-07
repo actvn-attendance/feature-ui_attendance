@@ -37,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void handleUnauthorizedEvent() {
         new Handler(Looper.getMainLooper()).post(() -> {
-            System.out.println(">>> TIMEOUT");
+//            System.out.println(">>> TIMEOUT");
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                     BaseActivity.this);
