@@ -1,9 +1,15 @@
 package com.example.attendanceqrcode.modelapi;
 
-public class InfoUser {
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class InfoUser implements Serializable {
     private String access_token;
     private String token_type;
-    private Account account;
+    private com.example.attendanceqrcode.modelapi.Account account;
 
     public InfoUser() {
     }

@@ -123,7 +123,7 @@
     <ProgressBar
         android:background="@drawable/bg_buttonlogin"
         android:id="@+id/processbar"
-        android:backgroundTint="@color/buttoncolor"
+        android:backgroundTint="@color/item_selected"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

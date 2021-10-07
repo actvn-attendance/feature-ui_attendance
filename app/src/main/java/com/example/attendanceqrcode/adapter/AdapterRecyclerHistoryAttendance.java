@@ -16,15 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.model.ClassRooms;
 import com.example.attendanceqrcode.model.HistoryAttendance;
+import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
+import com.example.attendanceqrcode.modelapi.HistoryAttendances;
 
 import java.util.List;
 
 
 public class AdapterRecyclerHistoryAttendance extends RecyclerView.Adapter<AdapterRecyclerHistoryAttendance.ViewHolder> {
-    List<HistoryAttendance> historyAttendances;
+    List<HistoryAttendances> historyAttendances;
     Context context;
 
-    public AdapterRecyclerHistoryAttendance(List<HistoryAttendance> historyAttendances, Context context) {
+    public AdapterRecyclerHistoryAttendance(List<HistoryAttendances> historyAttendances, Context context) {
         this.historyAttendances = historyAttendances;
         this.context = context;
         notifyDataSetChanged();
@@ -41,12 +43,12 @@ public class AdapterRecyclerHistoryAttendance extends RecyclerView.Adapter<Adapt
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        HistoryAttendance historyAttendance = historyAttendances.get(position);
+        HistoryAttendances historyAttendance = historyAttendances.get(position);
 
 
-        holder.txtNgayhoc.setText(historyAttendance.getDateAttendance());
+        holder.txtNgayhoc.setText(historyAttendance.getCreate_date().substring(0,10));
 
-        switch (historyAttendance.getTypeStatus())
+        switch (historyAttendance.getPresent())
         {
             case 0:
                 holder.txtStatus.setText("Chưa điểm danh");

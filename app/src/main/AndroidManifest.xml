@@ -23,9 +23,6 @@
         <activity
             android:name=".ClassDetailActivity"
             android:exported="true" />
-        <activity
-            android:name=".HistoryAttendanceActivity"
-            android:exported="true" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
@@ -37,6 +34,7 @@
         <activity android:name=".DangNhapActivity" />
         <activity android:name=".FogetPasswordActivity" />
         <activity android:name=".ChatDetailActivity" />
+        <activity android:name=".AccountDetailActivity"/>
         <activity
             android:name=".CaptureAct"
             android:screenOrientation="portrait"

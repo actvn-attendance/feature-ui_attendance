@@ -1,30 +1,45 @@
 package com.example.attendanceqrcode.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.AdapterRecyclerHistoryAttendance;
+import com.example.attendanceqrcode.adapter.AdapterRecyclerSubject;
+import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.model.HistoryAttendance;
+import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
+import com.example.attendanceqrcode.modelapi.HistoryAttendances;
 import com.example.attendanceqrcode.modelapi.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HistoryAttendanceFragment extends Fragment {
     RecyclerView recyclerView;
-    List<HistoryAttendance> historyAttendanceList;
     AdapterRecyclerHistoryAttendance adapterRecyclerHistoryAttendance;
+    Subject subject;
+    List<HistoryAttendanceUser> attendanceUserList = new ArrayList<>();
 
     public HistoryAttendanceFragment(Subject subject) {
+        this.subject = subject;
     }
 
 
@@ -37,22 +52,41 @@ public class HistoryAttendanceFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_history_attendance);
 
 
-        initData();
+        getHistoryAttendance(true,subject.getId());
 
-        adapterRecyclerHistoryAttendance = new AdapterRecyclerHistoryAttendance(historyAttendanceList,getContext());
-        recyclerView.setAdapter(adapterRecyclerHistoryAttendance);
+
 
         return view;
     }
 
-    private void initData() {
-        historyAttendanceList = new ArrayList<>();
-        historyAttendanceList.add(new HistoryAttendance(0,"15-11-2021 - 15:00"));
-        historyAttendanceList.add(new HistoryAttendance(1,"15-11-2021 - 15:00"));
-        historyAttendanceList.add(new HistoryAttendance(2,"15-11-2021 - 15:00"));
-        historyAttendanceList.add(new HistoryAttendance(0,"15-11-2021 - 15:00"));
-        historyAttendanceList.add(new HistoryAttendance(1,"15-11-2021 - 15:00"));
-        historyAttendanceList.add(new HistoryAttendance(2,"15-11-2021 - 15:00"));
+    private void getHistoryAttendance(boolean progress,int id)
+    {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
+        String token = sharedPref.getString("token", "");
+
+        ApiService.apiService.getHistoryAttendance(token,id).enqueue(new Callback<List<HistoryAttendanceUser>>() {
+            @Override
+            public void onResponse(Call<List<HistoryAttendanceUser>> call, Response<List<HistoryAttendanceUser>> response) {
+                if (response.code() == 200)
+                {
+                    attendanceUserList = response.body();
+                    for (HistoryAttendanceUser historyAttendanceUser : attendanceUserList)
+                    {
+                        adapterRecyclerHistoryAttendance = new AdapterRecyclerHistoryAttendance(historyAttendanceUser.getHistory_attendances(),getContext());
+                        recyclerView.setAdapter(adapterRecyclerHistoryAttendance);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HistoryAttendanceUser>> call, Throwable t) {
+
+            }
+        });
     }
+
+
 
 }

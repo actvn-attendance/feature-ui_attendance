@@ -11,24 +11,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.components.AppAlertDialog;
-import com.example.attendanceqrcode.fragment.AccountFragment;
 import com.example.attendanceqrcode.fragment.CalendarFragment;
 import com.example.attendanceqrcode.fragment.ChatFragment;
 import com.example.attendanceqrcode.fragment.ClassFragment;
 import com.example.attendanceqrcode.fragment.NotificationFragment;
 import com.example.attendanceqrcode.model.QrcodeUser;
+import com.example.attendanceqrcode.modelapi.Account;
+import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
 import com.example.attendanceqrcode.utils.AES;
 import com.example.attendanceqrcode.utils.AppConfigs;
@@ -36,7 +36,6 @@ import com.example.attendanceqrcode.utils.GpsTracker;
 import com.example.attendanceqrcode.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -60,12 +59,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     GpsTracker location;
     private long backPressdTime;
     Toast toast;
+    TextView tvTenSinhVien,tvMaSinhVien,imgProfile;
+
+    Account account;
 
     private static final int FRAGMENT_CALENDAR = 0;
     private static final int FRAGMENT_CLASS = 1;
     private static final int FRAGMENT_CHAT = 3;
     private static final int FRAGMENT_NOTIFICATION = 4;
-    private static final int FRAGMENT_ACCOUNT = 5;
     private int currentFragment = FRAGMENT_CALENDAR;
 
 
@@ -79,22 +80,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navigation_view);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         floatingActionButton = findViewById(R.id.fab);
+        View headerLayout = navigationView.getHeaderView(0);
+        tvTenSinhVien = headerLayout.findViewById(R.id.tv_ten_sinhvien);
+        tvMaSinhVien = headerLayout.findViewById(R.id.tv_ma_sv);
+        setSupportActionBar(toolbar);
+
         bottomNavigationView.setBackground(null);
 
         floatingActionButton.setBackgroundColor(getResources().getColor(R.color.background));
         floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_qr_code_scanner_24));
 
-        setSupportActionBar(toolbar);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(this);
 
         replaceFragment(new CalendarFragment());
         bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
+
+        account = (Account) getIntent().getSerializableExtra("student");
+        tvTenSinhVien.setText(account.getFull_name());
+        tvMaSinhVien.setText(account.getEmail());
+
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -130,7 +139,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-            openFragment(FRAGMENT_ACCOUNT, new AccountFragment());
+            Intent intent = new Intent(MainActivity.this,AccountDetailActivity.class);
+            intent.putExtra("student",account);
+            startActivity(intent);
+
         } else if (id == R.id.nav_change_pass) {
 
         }else if (id == R.id.nav_log_out)

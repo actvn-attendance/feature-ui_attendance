@@ -5,20 +5,24 @@ import java.util.List;
 public class HistoryAttendanceUser {
 
     private int user_id;
-    private int schedule_id;
     private int classroom_id;
-    private String classroom_name;
+    private int subject_id;
+    private String subject_name;
     private String user_name;
     private List<HistoryAttendances> history_attendances;
 
-    public HistoryAttendanceUser(int user_id, int schedule_id, int classroom_id, String classroom_name, String user_name, List<HistoryAttendances> history_attendances) {
+    public HistoryAttendanceUser(int user_id, int classroom_id, int subject_id, String subject_name, String user_name, List<HistoryAttendances> history_attendances) {
         this.user_id = user_id;
-        this.schedule_id = schedule_id;
         this.classroom_id = classroom_id;
-        this.classroom_name = classroom_name;
+        this.subject_id = subject_id;
+        this.subject_name = subject_name;
         this.user_name = user_name;
         this.history_attendances = history_attendances;
     }
+
+    public HistoryAttendanceUser() {
+    }
+
 
     public int getUser_id() {
         return user_id;
@@ -26,14 +30,6 @@ public class HistoryAttendanceUser {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
-    }
-
-    public int getSchedule_id() {
-        return schedule_id;
-    }
-
-    public void setSchedule_id(int schedule_id) {
-        this.schedule_id = schedule_id;
     }
 
     public int getClassroom_id() {
@@ -44,12 +40,20 @@ public class HistoryAttendanceUser {
         this.classroom_id = classroom_id;
     }
 
-    public String getClassroom_name() {
-        return classroom_name;
+    public int getSubject_id() {
+        return subject_id;
     }
 
-    public void setClassroom_name(String classroom_name) {
-        this.classroom_name = classroom_name;
+    public void setSubject_id(int subject_id) {
+        this.subject_id = subject_id;
+    }
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
     }
 
     public String getUser_name() {
@@ -59,7 +63,6 @@ public class HistoryAttendanceUser {
     public void setUser_name(String user_name) {
         this.user_name = user_name;
     }
-
 
     public List<HistoryAttendances> getHistory_attendances() {
         return history_attendances;
