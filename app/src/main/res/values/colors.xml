@@ -12,4 +12,6 @@
     <color name="item_selected">#FFF</color>
     <color name="transparent">#61F4F1F1</color>
     <color name="buttoncolor">#00BCD4</color>
+    <color name="text_tablayout_par_sellected">#000</color>
+    <color name="text_tablayout_paticipant">#FFC107</color>
 </resources>

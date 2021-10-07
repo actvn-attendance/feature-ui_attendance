@@ -35,6 +35,8 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
     TextView txtForgetPass;
     Button btnLogin;
     ProgressBar progressBar;
+    private long backPressdTime;
+    Toast toast;
 
     @Override
     protected void handleUnauthorizedEvent() {
@@ -122,5 +124,22 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
                     });
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressdTime+2000> System.currentTimeMillis())
+        {
+            toast.cancel();//thoat thi huy toast
+            super.onBackPressed();
+            return;
+
+
+        }else {
+            toast = Toast.makeText(this,"Press back again to exit the app",Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        backPressdTime = System.currentTimeMillis();
     }
 }

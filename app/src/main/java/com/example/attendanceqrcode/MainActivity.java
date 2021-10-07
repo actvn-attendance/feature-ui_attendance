@@ -59,6 +59,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     BottomNavigationView bottomNavigationView;
     FloatingActionButton floatingActionButton;
     GpsTracker location;
+    private long backPressdTime;
+    Toast toast;
 
     private static final int FRAGMENT_CALENDAR = 0;
     private static final int FRAGMENT_CLASS = 1;
@@ -93,23 +95,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
 
         replaceFragment(new CalendarFragment());
-        navigationView.getMenu().findItem(R.id.nav_calendar).setChecked(true);
         bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.bottom_calendar) {
                 openFragment(FRAGMENT_CALENDAR, new CalendarFragment());
-                navigationView.getMenu().findItem(R.id.nav_calendar).setChecked(true);
             } else if (id == R.id.bottom_class) {
                 openFragment(FRAGMENT_CLASS, new ClassFragment());
-                navigationView.getMenu().findItem(R.id.nav_class).setChecked(true);
             } else if (id == R.id.bottom_chat) {
                 openFragment(FRAGMENT_CHAT, new ChatFragment());
-                navigationView.getMenu().findItem(R.id.nav_chat).setChecked(true);
             } else if (id == R.id.bottom_notification) {
                 openFragment(FRAGMENT_NOTIFICATION, new NotificationFragment());
-                navigationView.getMenu().findItem(R.id.nav_notification).setChecked(true);
             }
             return true;
         });
@@ -133,22 +130,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_calendar) {
-            openFragment(FRAGMENT_CALENDAR, new CalendarFragment());
-            bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
-        } else if (id == R.id.nav_class) {
-            openFragment(FRAGMENT_CLASS, new ClassFragment());
-            bottomNavigationView.getMenu().findItem(R.id.bottom_class).setChecked(true);
-
-        } else if (id == R.id.nav_chat) {
-            openFragment(FRAGMENT_CHAT, new ChatFragment());
-            bottomNavigationView.getMenu().findItem(R.id.bottom_chat).setChecked(true);
-        } else if (id == R.id.nav_notification) {
-            openFragment(FRAGMENT_NOTIFICATION, new NotificationFragment());
-            bottomNavigationView.getMenu().findItem(R.id.bottom_notification).setChecked(true);
-        } else if (id == R.id.nav_account) {
+        if (id == R.id.nav_account) {
             openFragment(FRAGMENT_ACCOUNT, new AccountFragment());
         } else if (id == R.id.nav_change_pass) {
+
+        }else if (id == R.id.nav_log_out)
+        {
+            Intent intent = new Intent(MainActivity.this,DangNhapActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -167,7 +157,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (backPressdTime+2000> System.currentTimeMillis())
+            {
+                toast.cancel();//thoat thi huy toast
+                super.onBackPressed();
+                return;
+
+
+            }else {
+                toast = Toast.makeText(this,"Press back again to exit the app",Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+            backPressdTime = System.currentTimeMillis();
         }
 
     }
@@ -280,5 +282,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 R.drawable.ic_fail
         );
     }
+
 
 }

@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.attendanceqrcode.MainActivity;
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.modelapi.Schedule;
 
 import java.util.List;
@@ -58,6 +60,11 @@ public class AdapterRecyclerEventCalendar extends RecyclerView.Adapter<AdapterRe
 
     @Override
     public int getItemCount() {
+        if(scheduleList == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog(fragmentActivity);
+
+        }
         return scheduleList.size();
     }
 

@@ -30,6 +30,7 @@ public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickCh
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        getActivity().setTitle("Trò chuyện");
         recyclerViewGroupChat = view.findViewById(R.id.recycleGroupChat);
         initData();
         groupChatAdapter = new GroupChatAdapter(getActivity(),groupChatList,this);

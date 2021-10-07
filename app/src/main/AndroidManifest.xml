@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".AttendanceStatusActivity"></activity>
         <activity
+            android:name=".ClassDetailActivity"
+            android:exported="true" />
+        <activity
             android:name=".HistoryAttendanceActivity"
             android:exported="true" />
         <activity android:name=".MainActivity" />

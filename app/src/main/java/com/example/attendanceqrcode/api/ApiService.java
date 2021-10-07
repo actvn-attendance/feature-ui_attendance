@@ -9,6 +9,7 @@ import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
 import com.example.attendanceqrcode.modelapi.Schedule;
 import com.example.attendanceqrcode.modelapi.ScheduleStudent;
+import com.example.attendanceqrcode.modelapi.Subject;
 import com.example.attendanceqrcode.modelapi.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,18 +49,6 @@ public interface ApiService {
                                             @Query("end_date_time") String end_date_time,
                                             @Query("start_date_time") String start_date_time);
 
-//    @GET("api/live")
-//    Call<Currency> convertUsdToVnd(@Query("access_key") String access_key,
-//                                   @Query("currencies") String currencies,
-//                                   @Query("source") String source,
-//                                   @Query("format") int format);
-//
-//    @GET("api/live?access_key=843d4d34ae72b3882e3db642c51e28e6&currencies=VND&source=USD&format=1")
-//    Call<Currency> convertUsdToVnd1();
-//
-//
-//    @GET("api/live")
-//    Call<Currency> convertUsdToVnd2( @QueryMap Map<String, String> options);
 
     //Phuong thuc post(lay kêt qua diem danh)
     @Headers({"Content-Type: application/json"})
@@ -67,19 +56,25 @@ public interface ApiService {
     Call<ResponseAttendance> attendance(@Header("Authorization") String token,
                                         @Body JsonObject jsonObject);
 
-    //phuong thuc get(lay thong ke diem danh)
-    @GET("api/attendance/attendance-statistics")
-    Call<List<AttendanceStatistics>> getAttendanceStatistics(@Header("Authorization") String accessToken);
+    //get subject class
+    @Headers({"Content-Type: application/json"})
+    @GET("api/subject/get-list-subject-student")
+    Call<List<Subject>> getSubject (@Header("Authorization") String token);
 
-    //phuong thuc get(lay thong ke diem danh)
-    @GET("api/attendance/history-attendance-user")
-    Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
-                                                           @Query("classroom_id") int classroom_id);
 
-    //phuong thuc get(lay diem cua lop)
-    @GET("api/scores/get-scores")
-    Call<List<InfoScores>> getInfoScores(@Header("Authorization") String accessToken,
-                                         @Query("classroom_id") int classroom_id);
+//    //phuong thuc get(lay thong ke diem danh)
+//    @GET("api/attendance/attendance-statistics")
+//    Call<List<AttendanceStatistics>> getAttendanceStatistics(@Header("Authorization") String accessToken);
+//
+//    //phuong thuc get(lay thong ke diem danh)
+//    @GET("api/attendance/history-attendance-user")
+//    Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
+//                                                           @Query("classroom_id") int classroom_id);
+//
+//    //phuong thuc get(lay diem cua lop)
+//    @GET("api/scores/get-scores")
+//    Call<List<InfoScores>> getInfoScores(@Header("Authorization") String accessToken,
+//                                         @Query("classroom_id") int classroom_id);
 
 
 }

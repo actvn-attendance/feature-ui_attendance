@@ -13,4 +13,9 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="text_size_tablayout_participant" >
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/text_tablayout_paticipant</item>
+    </style>
 </resources>

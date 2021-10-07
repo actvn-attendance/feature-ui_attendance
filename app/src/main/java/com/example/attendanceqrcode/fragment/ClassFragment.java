@@ -15,24 +15,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.example.attendanceqrcode.ClassDetailActivity;
 import com.example.attendanceqrcode.HistoryAttendanceActivity;
 import com.example.attendanceqrcode.R;
-import com.example.attendanceqrcode.adapter.AdapterRecyclerClass;
+import com.example.attendanceqrcode.adapter.AdapterRecyclerSubject;
+import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.model.ClassRooms;
+import com.example.attendanceqrcode.modelapi.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarInputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ClassFragment extends Fragment implements AdapterRecyclerClass.ClickHistoryClass,AdapterRecyclerClass.ClickDetailClass, SwipeRefreshLayout.OnRefreshListener {
+public class ClassFragment extends Fragment implements AdapterRecyclerSubject.ClickDetailClass, SwipeRefreshLayout.OnRefreshListener {
 
-    AdapterRecyclerClass adapterRecyclerClass;
-    List<ClassRooms> lopHocModels;
+    AdapterRecyclerSubject adapterRecyclerSubject;
+    List<Subject> subjectList;
     RecyclerView recyclerViewLopHoc;
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -43,61 +45,47 @@ public class ClassFragment extends Fragment implements AdapterRecyclerClass.Clic
         // Inflate the layout for this fragment
 //        getActivity().setTitle("Lớp học");
         View view = inflater.inflate(R.layout.fragment_class, container, false);
+        getActivity().setTitle("Danh sách lớp");
         recyclerViewLopHoc = view.findViewById(R.id.recycler_class);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        initData();
-        adapterRecyclerClass = new AdapterRecyclerClass(lopHocModels,getActivity(),this,this);
-        recyclerViewLopHoc.setAdapter(adapterRecyclerClass);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.buttoncolor));
 
-
-//        getInfo();
-
+        getInfo();
 
         return view;
     }
 
-    private void initData()
+
+
+    private void getInfo()
     {
-        lopHocModels = new ArrayList<>();
-        lopHocModels.add(new ClassRooms(0,"Android nang cao",0,"Thay Cuong"));
-        lopHocModels.add(new ClassRooms(0,"Toi uu phan mem",0,"Thay Cuong"));
-        lopHocModels.add(new ClassRooms(0,"Toi uu phan mem nhung",0,"Co Van"));
-        lopHocModels.add(new ClassRooms(0,"Nhung nang cao",0,"Thay Truong"));
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
+        String token = sharedPref.getString("token", "");
+
+        ApiService.apiService.getSubject(token).enqueue(new Callback<List<Subject>>() {
+            @Override
+            public void onResponse(Call<List<Subject>> call, Response<List<Subject>> response) {
+                if (response.code() == 200)
+                {
+                    subjectList = response.body();
+                    adapterRecyclerSubject = new AdapterRecyclerSubject(subjectList,getActivity(),ClassFragment.this::clickDetail);
+                    recyclerViewLopHoc.setAdapter(adapterRecyclerSubject);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Subject>> call, Throwable t) {
+
+            }
+        });
     }
-
-
-//    private void getInfo()
-//    {
-//        SharedPreferences sharedPref = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
-//        String username = sharedPref.getString("username", "");
-//        String password = sharedPref.getString("password","");
-//        User user = new User(username,password);
-//        ApiService.apiService.sendAccount(user).enqueue(new Callback<InfoUser>() {
-//            @Override
-//            public void onResponse(Call<InfoUser> call, Response<InfoUser> response) {
-//                InfoUser infoUser = response.body();
-//
-//                lopHocModels = infoUser.getAccount().getClassRooms();
-//                adapterRecyclerClass = new AdapterRecyclerClass(lopHocModels,getActivity(),ClassFragment.this::clickItem);
-//                recyclerViewLopHoc.setAdapter(adapterRecyclerClass);
-//                adapterRecyclerClass.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<InfoUser> call, Throwable t) {
-//
-//            }
-//        });
-//    }
 
 
     @Override
     public void onRefresh() {
-//        getInfo();
+        getInfo();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -108,15 +96,12 @@ public class ClassFragment extends Fragment implements AdapterRecyclerClass.Clic
         },1500);
     }
 
-    @Override
-    public void clickHistory() {
-        Intent iHistoryAttendance = new Intent(getActivity(), HistoryAttendanceActivity.class);
-        startActivity(iHistoryAttendance);
-
-    }
 
     @Override
-    public void clickDetail() {
+    public void clickDetail(Subject subject) {
+        Intent intent = new Intent(getActivity(), ClassDetailActivity.class);
+        intent.putExtra("subject", subject);
 
+        startActivity(intent);
     }
 }

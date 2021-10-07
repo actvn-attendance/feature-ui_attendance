@@ -28,6 +28,7 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_notification, container, false);
+        getActivity().setTitle("Thông báo");
         recyclerView = view.findViewById(R.id.recyclerNotifi);
         initData();
         adapterRecyclerNotifi = new AdapterRecyclerNotifi(notificationList,getActivity(),this);
