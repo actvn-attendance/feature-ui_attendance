@@ -33,7 +33,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://05f3-27-72-144-189.ngrok.io/")
+            .baseUrl("http://0feb-27-72-144-189.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()
@@ -62,7 +62,7 @@ public interface ApiService {
     Call<List<Subject>> getSubject (@Header("Authorization") String token);
 
     @Headers({"Content-Type: application/json"})
-    @GET("notification/history")
+    @GET("api/notification/history")
     Call<Notifications> getNotification (@Header("Authorization") String token,
                                          @Query("page") int page,
                                          @Query("size") int size);
