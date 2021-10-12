@@ -8,11 +8,13 @@
     android:gravity="bottom">
 
     <ImageView
+        android:id="@+id/img_profile"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@mipmap/ic_launcher_round"/>
 
     <TextView
+        android:id="@+id/tv_ten_sinhvien"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Attendance"
@@ -22,6 +24,7 @@
         android:layout_marginTop="8dp"/>
 
     <TextView
+        android:id="@+id/tv_ma_sv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CT02432423"

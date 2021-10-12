@@ -1,6 +1,8 @@
 package com.example.attendanceqrcode.modelapi;
 
-public class Roles {
+import java.io.Serializable;
+
+public class Roles implements Serializable {
 
     private int role_id;
     private String role_cd;

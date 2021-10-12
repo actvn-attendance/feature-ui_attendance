@@ -6,6 +6,7 @@ import com.example.attendanceqrcode.modelapi.AttendanceStatistics;
 import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
 import com.example.attendanceqrcode.modelapi.InfoScores;
 import com.example.attendanceqrcode.modelapi.InfoUser;
+import com.example.attendanceqrcode.modelapi.Notifications;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
 import com.example.attendanceqrcode.modelapi.Schedule;
 import com.example.attendanceqrcode.modelapi.ScheduleStudent;
@@ -32,7 +33,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://2b10-27-72-144-189.ngrok.io/")
+            .baseUrl("http://0feb-27-72-144-189.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()
@@ -59,6 +60,17 @@ public interface ApiService {
     @Headers({"Content-Type: application/json"})
     @GET("api/subject/get-list-subject-student")
     Call<List<Subject>> getSubject (@Header("Authorization") String token);
+
+    @Headers({"Content-Type: application/json"})
+    @GET("api/notification/history")
+    Call<Notifications> getNotification (@Header("Authorization") String token,
+                                         @Query("page") int page,
+                                         @Query("size") int size);
+
+    //phuong thuc get(lay thong ke diem danh)
+    @GET("api/attendance/history-attendance-user")
+    Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
+                                                           @Query("subject_id") int subject_id);
 
 
 //    //phuong thuc get(lay thong ke diem danh)

@@ -1,8 +1,12 @@
 package com.example.attendanceqrcode.modelapi;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Account {
+public class Account implements Serializable {
     private int account_id;
     private String number_code;
     private String last_name;
@@ -190,4 +194,5 @@ public class Account {
     public void setRoles(List<Roles> roles) {
         this.roles = roles;
     }
+
 }
