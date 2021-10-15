@@ -8,16 +8,19 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:background="@color/background"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp">
 
         <ImageView
             android:id="@+id/img_back_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            app:tint="@color/white" />
 
         <TextView
             android:layout_marginStart="10dp"
@@ -28,6 +31,7 @@
             android:layout_gravity="center"
             android:text="Android"
             android:singleLine="true"
+            android:textColor="@color/white"
             android:layout_marginEnd="10dp"
             android:textSize="16dp"
             android:textStyle="bold" />
@@ -40,14 +44,13 @@
         android:id="@+id/tabLayyout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginHorizontal="-3dp"
         app:tabGravity="fill"
         app:tabIndicatorHeight="2dp"
         app:tabMaxWidth="0dp"
         app:tabMode="fixed"
         app:tabRippleColor="@color/white"
-        app:tabSelectedTextColor="@color/text_tablayout_par_sellected"
+        app:tabSelectedTextColor="@color/background"
         app:tabTextAppearance="@style/text_size_tablayout_participant"/>
 
     <androidx.viewpager.widget.ViewPager

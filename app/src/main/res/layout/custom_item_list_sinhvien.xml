@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/img_profile"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/image_group_chat"/>
+
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/img_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvTenSinhVien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trương Việt Hoàng"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/tvMaSinhVien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CT0202192"
+            android:textSize="14dp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/img_profile"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#6A6868" />
+
+</RelativeLayout>

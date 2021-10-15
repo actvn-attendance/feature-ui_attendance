@@ -30,6 +30,11 @@ public class Account implements Serializable {
     public Account() {
     }
 
+    public Account(String number_code, String full_name) {
+        this.number_code = number_code;
+        this.full_name = full_name;
+    }
+
     public Account(int account_id, String number_code, String last_name, String fist_name, String full_name, String role_cd, String password, String sex, String id_no, String date_of_birth, String issued_on, String native_place, String place_of_permanent, String phone_no, String email, String created_date, int active_flg, List<Roles> roles) {
         this.account_id = account_id;
         this.number_code = number_code;
