@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -36,6 +37,7 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
+    LinearLayoutManager linearLayoutManager;
 
 
     @Override
@@ -73,6 +75,9 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
                     notifications = response.body();
 
                     adapterRecyclerNotifi = new AdapterRecyclerNotifi(notifications.getData(),getActivity(),NotificationFragment.this::clickItemNoti);
+                    linearLayoutManager = new LinearLayoutManager(getActivity());
+                    linearLayoutManager.setReverseLayout(true);
+                    recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.setAdapter(adapterRecyclerNotifi);
                     progressBar.setVisibility(View.GONE);
                 }
