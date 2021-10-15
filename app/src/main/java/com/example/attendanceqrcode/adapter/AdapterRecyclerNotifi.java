@@ -1,5 +1,6 @@
 package com.example.attendanceqrcode.adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.model.ClassRooms;
 import com.example.attendanceqrcode.model.Notification;
 import com.example.attendanceqrcode.modelapi.Data;
@@ -75,6 +77,11 @@ public class AdapterRecyclerNotifi extends RecyclerView.Adapter<AdapterRecyclerN
 
     @Override
     public int getItemCount() {
+        if(notifications == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog(activity);
+
+        }
         return notifications.size();
     }
 

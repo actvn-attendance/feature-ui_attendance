@@ -23,7 +23,7 @@
         app:headerLabelColor="@color/black"
         app:maximumDaysRange="31"
         app:previousButtonSrc="@drawable/ic_previous"
-        app:selectionColor="#00BCD4"
+        app:selectionColor="@color/background"
         app:selectionLabelColor="@color/white"
         app:type="one_day_picker" />
 
@@ -59,7 +59,8 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="#00BCD4"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:overScrollMode="never"/>
 
     </androidx.cardview.widget.CardView>
 
