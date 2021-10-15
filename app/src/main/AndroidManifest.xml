@@ -17,24 +17,39 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AttendanceQrCode"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AttendanceStatusActivity"></activity>
+        <activity
+            android:name=".AttendanceStatusActivity"
+            android:theme="@style/Theme.AttendanceQrCode"></activity>
         <activity
             android:name=".ClassDetailActivity"
-            android:exported="true" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SplashScreenActivity">
+            android:exported="true"
+            android:theme="@style/Theme.AttendanceQrCode" />
+        <activity
+            android:name=".HistoryAttendanceActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AttendanceQrCode" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.AttendanceQrCode" />
+        <activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/Theme.AttendanceQrCode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DangNhapActivity" />
-        <activity android:name=".FogetPasswordActivity" />
-        <activity android:name=".ChatDetailActivity" />
-        <activity android:name=".AccountDetailActivity"/>
+        <activity
+            android:name=".DangNhapActivity"
+            android:theme="@style/Theme.AttendanceQrCode" />
+        <activity
+            android:name=".FogetPasswordActivity"
+            android:theme="@style/Theme.AttendanceQrCode" />
+        <activity
+            android:name=".ChatDetailActivity"
+            android:theme="@style/Theme.AttendanceQrCode" />
         <activity
             android:name=".CaptureAct"
             android:screenOrientation="portrait"
