@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.model.Message;
 import com.example.attendanceqrcode.utils.Utils;
 
@@ -44,11 +45,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         if(message.getUid() == uid){
             holder.layoutCompat.setGravity(Gravity.END);
-            holder.tvMessage.setBackgroundResource(R.color.background);
+            holder.tvMessage.setBackgroundResource(R.drawable.bg_mesage_user);
             holder.tvFullName.setVisibility(View.INVISIBLE);
         }else{
             holder.layoutCompat.setGravity(Gravity.START);
-            holder.tvMessage.setBackgroundColor(Color.GRAY);
+            holder.tvMessage.setBackgroundResource(R.drawable.bg_message_other);
             holder.tvFullName.setVisibility(View.VISIBLE);
             holder.tvFullName.setText(message.getFullName());
         }
@@ -58,6 +59,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public int getItemCount() {
+        if (messageList == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog(activity);
+        }
         return messageList.size();
     }
 

@@ -1,5 +1,6 @@
 package com.example.attendanceqrcode.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.modelapi.Account;
 
 import java.util.List;
@@ -57,6 +59,11 @@ public class AdapterRecyclerListSinhVien extends RecyclerView.Adapter<AdapterRec
 
     @Override
     public int getItemCount() {
+        if(studentList == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog((Activity) context);
+
+        }
         return studentList.size();
     }
 

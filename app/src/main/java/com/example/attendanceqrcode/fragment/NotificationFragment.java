@@ -79,6 +79,7 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
                     linearLayoutManager.setReverseLayout(true);
                     recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.setAdapter(adapterRecyclerNotifi);
+                    recyclerView.scrollToPosition(notifications.getData().size() - 1);
                     progressBar.setVisibility(View.GONE);
                 }
             }

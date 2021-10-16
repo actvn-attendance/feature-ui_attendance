@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.example.attendanceqrcode.utils.AES;
 import com.example.attendanceqrcode.utils.AppConfigs;
 import com.example.attendanceqrcode.utils.GpsTracker;
 import com.example.attendanceqrcode.utils.Utils;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -101,6 +103,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         replaceFragment(new CalendarFragment());
         bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
 
+        int menuItemId = bottomNavigationView.getMenu().getItem(4).getItemId();
+        BadgeDrawable badge = bottomNavigationView.getOrCreateBadge(menuItemId);
+        badge.setBackgroundColor(Color.RED);
+        badge.setNumber(2);
+
         account = (Account) getIntent().getSerializableExtra("student");
         tvTenSinhVien.setText(account.getFull_name());
         tvMaSinhVien.setText(account.getEmail());
@@ -115,6 +122,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else if (id == R.id.bottom_chat) {
                 openFragment(FRAGMENT_CHAT, new ChatFragment());
             } else if (id == R.id.bottom_notification) {
+                badge.setBackgroundColor(Color.WHITE);
+                badge.clearNumber();
                 openFragment(FRAGMENT_NOTIFICATION, new NotificationFragment());
             }
             return true;

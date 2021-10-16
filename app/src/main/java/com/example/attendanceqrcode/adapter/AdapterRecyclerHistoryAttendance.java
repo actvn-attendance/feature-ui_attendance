@@ -1,5 +1,6 @@
 package com.example.attendanceqrcode.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.model.ClassRooms;
 import com.example.attendanceqrcode.model.HistoryAttendance;
 import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
@@ -75,6 +77,11 @@ public class AdapterRecyclerHistoryAttendance extends RecyclerView.Adapter<Adapt
 
     @Override
     public int getItemCount() {
+        if( historyAttendances == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog((Activity) context);
+
+        }
         return historyAttendances.size();
     }
 

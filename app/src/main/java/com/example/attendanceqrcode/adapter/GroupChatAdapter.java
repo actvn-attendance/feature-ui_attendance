@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.model.ChatList;
+import com.example.attendanceqrcode.components.AppAlertDialog;
 import com.example.attendanceqrcode.model.GroupChat;
 import com.example.attendanceqrcode.model.MemberChatList;
 import com.example.attendanceqrcode.utils.Utils;
@@ -69,6 +70,10 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
 
     @Override
     public int getItemCount() {
+        if (groupChatList == null)
+        {
+            AppAlertDialog.showTokenTimeOutDialog(activity);
+        }
         return groupChatList.size();
     }
 
