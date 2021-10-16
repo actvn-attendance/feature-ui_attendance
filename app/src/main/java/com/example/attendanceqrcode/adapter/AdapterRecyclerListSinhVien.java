@@ -42,8 +42,10 @@ public class AdapterRecyclerListSinhVien extends RecyclerView.Adapter<AdapterRec
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Account account = studentList.get(position);
-
-
+        if (position == studentList.size() - 1)
+        {
+            holder.view.setVisibility(View.GONE);
+        }
         holder.tvTenSinhVien.setText(account.getFull_name());
         holder.tvMaSinhVien.setText(account.getNumber_code());
 
@@ -70,11 +72,13 @@ public class AdapterRecyclerListSinhVien extends RecyclerView.Adapter<AdapterRec
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTenSinhVien;
         TextView tvMaSinhVien;
+        View view;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvTenSinhVien = itemView.findViewById(R.id.tvTenSinhVien);
             tvMaSinhVien = itemView.findViewById(R.id.tvMaSinhVien);
+            view = itemView.findViewById(R.id.view_line);
 
 
         }

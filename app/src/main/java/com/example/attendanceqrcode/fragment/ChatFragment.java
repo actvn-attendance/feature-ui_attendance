@@ -7,10 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 
 import com.example.attendanceqrcode.ChatDetailActivity;
 import com.example.attendanceqrcode.R;
@@ -38,10 +43,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickChatGroup {
+public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickChatGroup, SwipeRefreshLayout.OnRefreshListener {
     RecyclerView recyclerViewGroupChat;
     GroupChatAdapter groupChatAdapter;
     List<ChatList> groupChatList = new ArrayList<>();
+    SwipeRefreshLayout swipeRefreshLayout;
+    ProgressBar progressBar;
 
     private DatabaseReference userChatListDB;
     private int uid;
@@ -72,6 +79,19 @@ public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickCh
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        progressBar = view.findViewById(R.id.processbar);
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+
+            }
+        },1500);
 
         this.uid = Utils.getUserID(getActivity());
         userChatListDB = FirebaseDatabase.getInstance().getReference()
@@ -81,9 +101,14 @@ public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickCh
 
         getActivity().setTitle("Trò chuyện");
         recyclerViewGroupChat = view.findViewById(R.id.recycleGroupChat);
+        LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_right_to_left);
+        recyclerViewGroupChat.setLayoutAnimation(animationController);
 
         groupChatAdapter = new GroupChatAdapter(getActivity(), groupChatList, this);
         recyclerViewGroupChat.setAdapter(groupChatAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.buttoncolor));
 
 
         return view;
@@ -111,5 +136,19 @@ public class ChatFragment extends Fragment implements GroupChatAdapter.OnClickCh
         });
         
       
+    }
+
+    @Override
+    public void onRefresh() {
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);//tat di
+
+            }
+        },1500);
+
     }
 }

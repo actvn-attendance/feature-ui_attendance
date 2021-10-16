@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
 
@@ -76,6 +78,8 @@ public class ClassFragment extends Fragment implements AdapterRecyclerSubject.Cl
                 if (response.code() == 200)
                 {
                     subjectList = response.body();
+                    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_right_to_left);
+                    recyclerViewLopHoc.setLayoutAnimation(animationController);
                     adapterRecyclerSubject = new AdapterRecyclerSubject(subjectList,getActivity(),ClassFragment.this::clickDetail);
                     recyclerViewLopHoc.setAdapter(adapterRecyclerSubject);
                     progressBar.setVisibility(View.GONE);

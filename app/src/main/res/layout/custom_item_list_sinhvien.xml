@@ -35,10 +35,11 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view_line"
         android:layout_marginTop="10dp"
         android:layout_below="@id/img_profile"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#6A6868" />
+        android:background="#CAC9C9" />
 
 </RelativeLayout>

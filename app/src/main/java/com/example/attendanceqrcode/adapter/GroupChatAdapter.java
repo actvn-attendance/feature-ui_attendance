@@ -47,6 +47,10 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ChatList groupChat = groupChatList.get(position);
+        if (position == groupChatList.size() - 1)
+        {
+            holder.view.setVisibility(View.GONE);
+        }
         MemberChatList member = new MemberChatList();
         int meID = Utils.getUserID(activity);
 
@@ -81,6 +85,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
         ImageView imgGroup;
         TextView tvNameGroup;
         RelativeLayout rlGroupChat;
+        View view;
 
         public ViewHolder(@NonNull  View itemView) {
             super(itemView);
@@ -88,6 +93,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
             imgGroup = itemView.findViewById(R.id.img_group);
             tvNameGroup = itemView.findViewById(R.id.tv_nameGroup);
             rlGroupChat = itemView.findViewById(R.id.rl_ChatGroup);
+            view = itemView.findViewById(R.id.view_line);
 
         }
     }

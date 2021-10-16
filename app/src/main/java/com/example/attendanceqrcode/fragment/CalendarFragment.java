@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -96,6 +98,8 @@ public class CalendarFragment extends Fragment {
                         if (currentTime.getTime() == convertStringToDate(scheduleStudents.get(k).getDatetime()).getTime()) {
                             rlNodata.setVisibility(View.GONE);
                             recyclerView_event.setVisibility(View.VISIBLE);
+                            LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_anim_up_to_down);
+                            recyclerView_event.setLayoutAnimation(animationController);
                             adapterRecyclerEventCalendar = new AdapterRecyclerEventCalendar(scheduleStudents.get(k).getSchedule(), getActivity());
                             recyclerView_event.setAdapter(adapterRecyclerEventCalendar);
 
@@ -144,6 +148,8 @@ public class CalendarFragment extends Fragment {
                                 recyclerView_event.setVisibility(View.VISIBLE);
                                 Log.d("currentTime____", clickedDayCalendar.getTime().toString());
                                 Log.d("currentTime-111 ", date.toString());
+                                LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_anim_up_to_down);
+                                recyclerView_event.setLayoutAnimation(animationController);
 
                                 adapterRecyclerEventCalendar = new AdapterRecyclerEventCalendar(scheduleStudents.get(k).getSchedule(), getActivity());
                                 recyclerView_event.setAdapter(adapterRecyclerEventCalendar);

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -48,22 +49,37 @@ public class AdapterRecyclerNotifi extends RecyclerView.Adapter<AdapterRecyclerN
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Data notification = notifications.get(position);
-
+        holder.tvContentNotifi.setText(notification.getBody());
+        holder.tvDatenotifi.setText(notification.getUpdated_date().substring(0,10)+"-"+notification.getUpdated_date().substring(11,16));
+        
         if (notification.getType() == 1)
         {
             holder.imgNotifi.setImageResource(R.drawable.ic_logout);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(activity,notification.getBody(),Toast.LENGTH_SHORT).show();
+                }
+            });
         }else if (notification.getType() == 2)
         {
             holder.imgNotifi.setImageResource(R.drawable.ic_notifications);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(activity,notification.getBody(),Toast.LENGTH_SHORT).show();
+                }
+            });
         }else if (notification.getType() == 3)
         {
             holder.imgNotifi.setImageResource(R.drawable.ic_qr_code);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(activity,notification.getBody(),Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-
-
-        holder.tvContentNotifi.setText(notification.getBody());
-        holder.tvDatenotifi.setText(notification.getUpdated_date().substring(0,10)+"-"+notification.getUpdated_date().substring(11,16));
-
         holder.rlItemNotifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

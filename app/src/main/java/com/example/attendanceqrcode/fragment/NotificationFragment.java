@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
 import com.example.attendanceqrcode.R;
@@ -73,6 +75,8 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
                 if (response.code() == 200)
                 {
                     notifications = response.body();
+                    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_anim_up_to_down);
+                    recyclerView.setLayoutAnimation(animationController);
 
                     adapterRecyclerNotifi = new AdapterRecyclerNotifi(notifications.getData(),getActivity(),NotificationFragment.this::clickItemNoti);
                     linearLayoutManager = new LinearLayoutManager(getActivity());

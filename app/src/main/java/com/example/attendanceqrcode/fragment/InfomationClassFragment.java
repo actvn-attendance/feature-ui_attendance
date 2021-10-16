@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -57,6 +59,10 @@ public class InfomationClassFragment extends Fragment implements AdapterRecycler
         tvSoTinChi.setText(subject.getNumber_of_credits() + "");
 
         initData();
+
+        LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_anim_up_to_down);
+        recyclerGiaoVien.setLayoutAnimation(animationController);
+        recyclerView.setLayoutAnimation(animationController);
 
         adapterGiaoVien = new AdapterRecyclerListSinhVien(teacherList, getActivity(), this);
         recyclerGiaoVien.setAdapter(adapterRecyclerListSinhVien);

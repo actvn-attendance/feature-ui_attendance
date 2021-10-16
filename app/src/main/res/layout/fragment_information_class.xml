@@ -19,7 +19,7 @@
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="Tên lớp học: "
-            android:textSize="18sp" />
+            android:textSize="18dp" />
         <TextView
             android:layout_toEndOf="@id/tv1"
             android:id="@+id/tv_ten_lop"
@@ -71,7 +71,7 @@
 
 
     <TextView
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:textSize="18dp"
         android:text="DANH SÁCH SINH VIÊN:"
         android:layout_width="wrap_content"
