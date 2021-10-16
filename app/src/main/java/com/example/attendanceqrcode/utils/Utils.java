@@ -55,6 +55,15 @@ public class Utils {
         return sharedPreferences.getString("fullName", "");
     }
 
+    public static String getPersonalID(Activity activity, int otherUserID){
+        int uid = getUserID(activity);
+        if(uid < otherUserID){
+            return uid+"_"+otherUserID;
+        }
+
+        return otherUserID+"_"+uid;
+    }
+
     public static boolean checkGPSPermission(Activity activity, Context context) {
         try {
             if (ContextCompat.checkSelfPermission(context,

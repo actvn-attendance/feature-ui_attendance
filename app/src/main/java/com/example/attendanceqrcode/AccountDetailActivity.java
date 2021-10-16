@@ -1,5 +1,6 @@
 package com.example.attendanceqrcode;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,9 +18,10 @@ public class AccountDetailActivity extends AppCompatActivity {
 
     Account account;
     ImageView imgBack;
-    TextView tvHoten,tvNgaySinh,tvMaSV,tvSoSMND,tvDiaChi,tvGioiTinh,tvEmail,tvSdt;
+    TextView tvHoten, tvNgaySinh, tvMaSV, tvSoSMND, tvDiaChi, tvGioiTinh, tvEmail, tvSdt;
     Button btnChat;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,22 +37,20 @@ public class AccountDetailActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_back_detail);
         btnChat = findViewById(R.id.btn_chat);
 
-        int uid  = Utils.getUserID(AccountDetailActivity.this);
+        int uid = Utils.getUserID(AccountDetailActivity.this);
 
         account = (Account) getIntent().getSerializableExtra("student");
 
-        if (account.getAccount_id() == uid)
-        {
+        if (account.getAccount_id() == uid) {
             btnChat.setVisibility(View.GONE);
-            tvHoten.setText(account.getFull_name()+"");
-            tvNgaySinh.setText(account.getDate_of_birth().substring(0,10)+"");
-            tvMaSV.setText(account.getNumber_code()+"");
-            tvSoSMND.setText(account.getId_no()+"");
-            tvDiaChi.setText(account.getNative_place()+"");
-            tvEmail.setText(account.getEmail()+"");
-            tvSdt.setText(account.getPhone_no()+"");
         }
-
+        tvHoten.setText(account.getFull_name() + "");
+        tvNgaySinh.setText(account.getDate_of_birth());
+        tvMaSV.setText(account.getNumber_code() + "");
+        tvSoSMND.setText(account.getId_no() + "");
+        tvDiaChi.setText(account.getNative_place() + "");
+        tvEmail.setText(account.getEmail() + "");
+        tvSdt.setText(account.getPhone_no() + "");
 
 
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -63,13 +63,11 @@ public class AccountDetailActivity extends AppCompatActivity {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountDetailActivity.this,ChatDetailActivity.class);
-                intent.putExtra("chat",account);
+                Intent intent = new Intent(AccountDetailActivity.this, ChatDetailActivity.class);
+                intent.putExtra("chat", account);
                 startActivity(intent);
             }
         });
-
-
 
 
     }

@@ -22,6 +22,9 @@
             android:name=".AttendanceStatusActivity"
             android:theme="@style/Theme.AttendanceQrCode"></activity>
         <activity
+            android:name=".AccountDetailActivity"
+            android:theme="@style/Theme.AttendanceQrCode"></activity>
+        <activity
             android:name=".ClassDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.AttendanceQrCode" />

@@ -2,6 +2,7 @@ package com.example.attendanceqrcode.api;
 
 
 import com.example.attendanceqrcode.middleware.UnauthorizedInterceptor;
+import com.example.attendanceqrcode.modelapi.Account;
 import com.example.attendanceqrcode.modelapi.AttendanceStatistics;
 import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
 import com.example.attendanceqrcode.modelapi.InfoScores;
@@ -33,7 +34,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://6dfd-27-72-105-40.ngrok.io/")
+            .baseUrl("http://b92b-1-52-127-26.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()
@@ -59,13 +60,23 @@ public interface ApiService {
     //get subject class
     @Headers({"Content-Type: application/json"})
     @GET("api/subject/get-list-subject-student")
-    Call<List<Subject>> getSubject (@Header("Authorization") String token);
+    Call<List<Subject>> getSubject(@Header("Authorization") String token);
+
+    // get user in subject
+    @Headers({"Content-Type: application/json"})
+    @GET("api/subject/get-list-user")
+    Call<List<Account>> getUserInSubject(@Header("Authorization") String token, @Query("subject_id") int idSubject);
+
+    // get info user by id
+    @Headers({"Content-Type: application/json"})
+    @GET("api/user/get_user")
+    Call<Account> getUserById(@Header("Authorization") String token, @Query("account_id") int idSubject);
 
     @Headers({"Content-Type: application/json"})
     @GET("api/notification/history")
-    Call<Notifications> getNotification (@Header("Authorization") String token,
-                                         @Query("page") int page,
-                                         @Query("size") int size);
+    Call<Notifications> getNotification(@Header("Authorization") String token,
+                                        @Query("page") int page,
+                                        @Query("size") int size);
 
     //phuong thuc get(lay thong ke diem danh)
     @GET("api/attendance/history-attendance-user")

@@ -18,17 +18,20 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
+import com.example.attendanceqrcode.model.ChatList;
 import com.example.attendanceqrcode.model.GroupChat;
+import com.example.attendanceqrcode.model.MemberChatList;
+import com.example.attendanceqrcode.utils.Utils;
 
 
 import java.util.List;
 
 public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.ViewHolder> {
      FragmentActivity activity;
-     List<GroupChat> groupChatList;
+     List<ChatList> groupChatList;
      OnClickChatGroup onClickChatGroup;
 
-    public GroupChatAdapter(FragmentActivity activity, List<GroupChat> groupChatList, OnClickChatGroup onClickChatGroup) {
+    public GroupChatAdapter(FragmentActivity activity, List<ChatList> groupChatList, OnClickChatGroup onClickChatGroup) {
         this.activity = activity;
         this.groupChatList = groupChatList;
         this.onClickChatGroup = onClickChatGroup;
@@ -42,21 +45,26 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GroupChat groupChat = groupChatList.get(position);
+        ChatList groupChat = groupChatList.get(position);
+        MemberChatList member = new MemberChatList();
+        int meID = Utils.getUserID(activity);
 
-        holder.imgGroup.setImageResource(groupChat.getImageGroup());
-        holder.tvNameGroup.setText(groupChat.getNameGroup());
-        holder.tvDescription.setText(groupChat.getDescription());
+        for(MemberChatList mem : groupChat.getMembers()){
+            if(mem.uid != meID){
+                member = mem;
+                break;
+            }
+        }
 
+        holder.tvNameGroup.setText(member.fullName);
+
+        long userID = member.uid;
         holder.rlGroupChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickChatGroup.onClickItem();
+                onClickChatGroup.onClickItem(userID);
             }
         });
-
-
-
     }
 
     @Override
@@ -67,7 +75,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgGroup;
         TextView tvNameGroup;
-        TextView tvDescription;
         RelativeLayout rlGroupChat;
 
         public ViewHolder(@NonNull  View itemView) {
@@ -75,13 +82,12 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
 
             imgGroup = itemView.findViewById(R.id.img_group);
             tvNameGroup = itemView.findViewById(R.id.tv_nameGroup);
-            tvDescription = itemView.findViewById(R.id.tv_description);
             rlGroupChat = itemView.findViewById(R.id.rl_ChatGroup);
 
         }
     }
 
     public interface OnClickChatGroup{
-        void onClickItem();
+        void onClickItem(long uid);
     }
 }

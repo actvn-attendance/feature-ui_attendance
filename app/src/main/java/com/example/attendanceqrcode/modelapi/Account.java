@@ -65,7 +65,7 @@ public class Account implements Serializable {
     }
 
     public String getNumber_code() {
-        return number_code;
+        return number_code == null ? "Chưa cập nhật" : number_code;
     }
 
     public void setNumber_code(String number_code) {
@@ -73,7 +73,7 @@ public class Account implements Serializable {
     }
 
     public String getLast_name() {
-        return last_name;
+        return last_name == null ? "Chưa cập nhật" : last_name;
     }
 
     public void setLast_name(String last_name) {
@@ -89,7 +89,7 @@ public class Account implements Serializable {
     }
 
     public String getFull_name() {
-        return full_name;
+        return full_name == null ? "Chưa cập nhật" : full_name;
     }
 
     public void setFull_name(String full_name) {
@@ -121,7 +121,7 @@ public class Account implements Serializable {
     }
 
     public String getId_no() {
-        return id_no;
+        return id_no == null ? "Chưa cập nhật" : id_no;
     }
 
     public void setId_no(String id_no) {
@@ -129,7 +129,7 @@ public class Account implements Serializable {
     }
 
     public String getDate_of_birth() {
-        return date_of_birth;
+        return date_of_birth == null ? "Chưa cập nhật" : date_of_birth.substring(0, 10);
     }
 
     public void setDate_of_birth(String date_of_birth) {
@@ -145,7 +145,7 @@ public class Account implements Serializable {
     }
 
     public String getNative_place() {
-        return native_place;
+        return native_place == null ? "Chưa cập nhật" : native_place;
     }
 
     public void setNative_place(String native_place) {
@@ -153,7 +153,7 @@ public class Account implements Serializable {
     }
 
     public String getPlace_of_permanent() {
-        return place_of_permanent;
+        return place_of_permanent == null ? "Chưa cập nhật" : place_of_permanent;
     }
 
     public void setPlace_of_permanent(String place_of_permanent) {
@@ -161,7 +161,7 @@ public class Account implements Serializable {
     }
 
     public String getPhone_no() {
-        return phone_no;
+        return phone_no == null ? "Chưa cập nhật" : phone_no;
     }
 
     public void setPhone_no(String phone_no) {
@@ -169,7 +169,7 @@ public class Account implements Serializable {
     }
 
     public String getEmail() {
-        return email;
+        return email == null ? "Chưa cập nhật" : email;
     }
 
     public void setEmail(String email) {

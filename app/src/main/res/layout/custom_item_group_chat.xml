@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:id="@+id/rl_ChatGroup">
 
    <ImageView
@@ -12,25 +12,19 @@
        android:layout_height="50dp"
        android:src="@drawable/image_group_chat"
        />
+
     <TextView
         android:id="@+id/tv_nameGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Android nang cao L04"
-        android:layout_toEndOf="@id/img_group"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        />
-
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thay cuong"
         android:layout_toEndOf="@id/img_group"
-        android:layout_below="@id/tv_nameGroup"
-        android:layout_marginStart="10dp"
-        />
+        android:text="Android nang cao L04"
+        android:textColor="@color/background"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
