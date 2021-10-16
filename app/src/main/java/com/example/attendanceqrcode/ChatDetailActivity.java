@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.MessageAdapter;
@@ -42,6 +43,7 @@ public class ChatDetailActivity extends BaseActivity {
     EditText edtMessage;
     ImageButton btnSend;
     ImageView btnBack;
+    TextView txtTitle;
 
     Account account;
     private DatabaseReference personalChatDB, meChatListDB, userChatListDB;
@@ -111,7 +113,9 @@ public class ChatDetailActivity extends BaseActivity {
         edtMessage = findViewById(R.id.edt_message);
         btnSend = findViewById(R.id.btn_send);
         btnBack = findViewById(R.id.btnBack);
+        txtTitle = findViewById(R.id.tvGroupDetail);
 
+        txtTitle.setText(account.getFull_name());
 
         messageList = new ArrayList<>();
         messageAdapter = new MessageAdapter(this, messageList);

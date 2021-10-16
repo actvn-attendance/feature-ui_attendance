@@ -6,18 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/llGroupDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:background="@color/background"
         android:padding="10dp">
         <ImageView
             android:id="@+id/btnBack"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_back"
+            app:tint="@color/white" />
         <TextView
             android:id="@+id/tvGroupDetail"
             android:layout_width="match_parent"
@@ -25,9 +26,11 @@
             android:text="Chat"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:gravity="center"/>
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerChat"
