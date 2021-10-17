@@ -2,7 +2,11 @@ package com.example.attendanceqrcode.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +16,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,11 +38,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -50,11 +61,15 @@ public class ChatClassFragment extends Fragment {
     List<Message> messageList;
     EditText edtMessage;
     ImageButton btnSend;
+    ImageView btnTakePhoto,imageView,imgDeletePhoto;
+    RelativeLayout rlPhoto;
 
     private Subject subject;
     private DatabaseReference classChatDB, messageDB;
     private String fullName;
     private long uid;
+    public static  int RESULT_LOAD_IMG = 101;
+    public Uri imageUri;
 
     @SuppressLint("RestrictedApi")
     public ChatClassFragment(Subject subject) {
@@ -116,6 +131,10 @@ public class ChatClassFragment extends Fragment {
         recyclerChat = view.findViewById(R.id.recyclerChat);
         edtMessage = view.findViewById(R.id.edt_message);
         btnSend = view.findViewById(R.id.btn_send);
+        btnTakePhoto = view.findViewById(R.id.take_photo);
+        imageView = view.findViewById(R.id.img_display_photo);
+        imgDeletePhoto = view.findViewById(R.id.img_deletePhoto);
+        rlPhoto = view.findViewById(R.id.rl_photo);
 
 
         messageList = new ArrayList<>();
@@ -133,6 +152,25 @@ public class ChatClassFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 checkKeyBoard();
+            }
+        });
+
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sellectPhoto();
+
+            }
+        });
+
+        imgDeletePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageUri = null;
+                rlPhoto.setVisibility(View.GONE);
+                btnTakePhoto.setVisibility(View.VISIBLE);
+                edtMessage.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -181,6 +219,38 @@ public class ChatClassFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void sellectPhoto()
+    {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                rlPhoto.setVisibility(View.VISIBLE);
+                imageView.setImageBitmap(selectedImage);
+                recyclerChat.scrollToPosition(messageList.size() - 1);
+                btnTakePhoto.setVisibility(View.INVISIBLE);
+                edtMessage.setVisibility(View.INVISIBLE);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 
 }

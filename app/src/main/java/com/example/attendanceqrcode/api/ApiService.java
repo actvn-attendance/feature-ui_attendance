@@ -80,7 +80,7 @@ public interface ApiService {
                                         @Query("size") int size);
 
     //phuong thuc get(lay thong ke diem danh)
-    @GET("api/attendance/history-attendance-user")
+    @GET("api/attendance/history-attendance-schedule")
     Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
                                                            @Query("subject_id") int subject_id);
 
