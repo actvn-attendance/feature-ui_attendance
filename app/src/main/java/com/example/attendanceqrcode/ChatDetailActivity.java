@@ -167,7 +167,8 @@ public class ChatDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 imageUri = null;
                 rlPhoto.setVisibility(View.GONE);
-                edtMessage.setEnabled(true);
+                btnTakePhoto.setVisibility(View.VISIBLE);
+                edtMessage.setVisibility(View.VISIBLE);
 
             }
         });
@@ -304,7 +305,8 @@ public class ChatDetailActivity extends BaseActivity {
                 rlPhoto.setVisibility(View.VISIBLE);
                 imageView.setImageBitmap(selectedImage);
                 recyclerChat.scrollToPosition(messageList.size() - 1);
-                edtMessage.setEnabled(false);
+                btnTakePhoto.setVisibility(View.INVISIBLE);
+                edtMessage.setVisibility(View.INVISIBLE);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(ChatDetailActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
