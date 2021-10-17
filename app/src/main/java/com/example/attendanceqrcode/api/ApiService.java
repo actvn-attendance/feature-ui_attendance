@@ -34,7 +34,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://5744-1-52-127-26.ngrok.io/")
+            .baseUrl("http://0b31-27-72-105-40.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()
@@ -79,7 +79,7 @@ public interface ApiService {
                                         @Query("size") int size);
 
     //phuong thuc get(lay thong ke diem danh)
-    @GET("api/attendance/history-attendance-user")
+    @GET("api/attendance/history-attendance-schedule")
     Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
                                                            @Query("subject_id") int subject_id);
 

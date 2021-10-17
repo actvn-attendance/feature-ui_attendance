@@ -4,7 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,7 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.MessageAdapter;
@@ -30,6 +36,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +52,10 @@ public class ChatDetailActivity extends BaseActivity {
     ImageButton btnSend;
     ImageView btnBack;
     TextView txtTitle;
+    ImageView btnTakePhoto,imageView,imgDeletePhoto;
+    RelativeLayout rlPhoto;
+    public static  int RESULT_LOAD_IMG = 101;
+    public Uri imageUri;
 
     Account account;
     private DatabaseReference personalChatDB, meChatListDB, userChatListDB;
@@ -114,6 +126,10 @@ public class ChatDetailActivity extends BaseActivity {
         btnSend = findViewById(R.id.btn_send);
         btnBack = findViewById(R.id.btnBack);
         txtTitle = findViewById(R.id.tvGroupDetail);
+        btnTakePhoto = findViewById(R.id.take_photo);
+        imageView = findViewById(R.id.img_display_photo);
+        imgDeletePhoto = findViewById(R.id.img_deletePhoto);
+        rlPhoto = findViewById(R.id.rl_photo);
 
         txtTitle.setText(account.getFull_name());
 
@@ -134,6 +150,25 @@ public class ChatDetailActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sellectPhoto();
+
+            }
+        });
+
+        imgDeletePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageUri = null;
+                rlPhoto.setVisibility(View.GONE);
+                edtMessage.setEnabled(true);
+
             }
         });
 
@@ -246,5 +281,37 @@ public class ChatDetailActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+
+    private void sellectPhoto()
+    {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                rlPhoto.setVisibility(View.VISIBLE);
+                imageView.setImageBitmap(selectedImage);
+                recyclerChat.scrollToPosition(messageList.size() - 1);
+                edtMessage.setEnabled(false);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(ChatDetailActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(ChatDetailActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 }
