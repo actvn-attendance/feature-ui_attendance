@@ -1,16 +1,12 @@
 package com.example.attendanceqrcode.api;
 
 
-import com.example.attendanceqrcode.middleware.UnauthorizedInterceptor;
 import com.example.attendanceqrcode.model.NotificationRequest;
 import com.example.attendanceqrcode.modelapi.Account;
-import com.example.attendanceqrcode.modelapi.AttendanceStatistics;
 import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
-import com.example.attendanceqrcode.modelapi.InfoScores;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.Notifications;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
-import com.example.attendanceqrcode.modelapi.Schedule;
 import com.example.attendanceqrcode.modelapi.ScheduleStudent;
 import com.example.attendanceqrcode.modelapi.Subject;
 import com.example.attendanceqrcode.modelapi.User;
@@ -80,7 +76,7 @@ public interface ApiService {
                                         @Query("size") int size);
 
     //phuong thuc get(lay thong ke diem danh)
-    @GET("api/attendance/history-attendance-schedule")
+    @GET("api/attendance/history-attendance-user")
     Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
                                                            @Query("subject_id") int subject_id);
 
