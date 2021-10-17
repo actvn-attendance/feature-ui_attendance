@@ -74,8 +74,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int FRAGMENT_NOTIFICATION = 4;
     private int currentFragment = FRAGMENT_CALENDAR;
 
-    private FirebaseHelper firebaseHelper = new FirebaseHelper();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +114,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvTenSinhVien.setText(account.getFull_name());
         tvMaSinhVien.setText(account.getEmail());
 
-        firebaseHelper.subscribeTopic(MainActivity.this, String.valueOf(account.getAccount_id()));
+        FirebaseHelper.subscribeTopic(MainActivity.this, String.valueOf(account.getAccount_id()));
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();

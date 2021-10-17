@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,12 +30,18 @@ import com.example.attendanceqrcode.model.NotificationRequest;
 import com.example.attendanceqrcode.modelapi.Account;
 import com.example.attendanceqrcode.utils.FirebaseHelper;
 import com.example.attendanceqrcode.utils.Utils;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -54,9 +61,9 @@ public class ChatDetailActivity extends BaseActivity {
     ImageButton btnSend;
     ImageView btnBack;
     TextView txtTitle;
-    ImageView btnTakePhoto,imageView,imgDeletePhoto;
+    ImageView btnTakePhoto, imageView, imgDeletePhoto;
     RelativeLayout rlPhoto;
-    public static  int RESULT_LOAD_IMG = 101;
+    public static int RESULT_LOAD_IMG = 101;
     public Uri imageUri;
 
     Account account;
@@ -65,7 +72,6 @@ public class ChatDetailActivity extends BaseActivity {
     private long uid;
     private final Date now = new Date();
     private boolean isFirst = true;
-    private FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     ChildEventListener chatListener = new ChildEventListener() {
         @Override
@@ -138,7 +144,9 @@ public class ChatDetailActivity extends BaseActivity {
 
         messageList = new ArrayList<>();
         messageAdapter = new MessageAdapter(this, messageList);
+        recyclerChat.setHasFixedSize(true);
         recyclerChat.setAdapter(messageAdapter);
+        messageAdapter.notifyDataSetChanged();
 
 
         btnSend.setOnClickListener(view -> {
@@ -174,26 +182,52 @@ public class ChatDetailActivity extends BaseActivity {
     }
 
     private void sendMessage() {
-        String message = edtMessage.getText().toString().trim();
-        if (TextUtils.isEmpty(message)) {
-            return;
+        if (imageUri != null) {
+            ProgressDialog progressDialog
+                    = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/chat-personal/" + chatID + "/" + imageUri.getLastPathSegment());
+
+            storageRef.putFile(imageUri).addOnFailureListener(exception -> {
+                Toast
+                        .makeText(ChatDetailActivity.this,
+                                "Gửi thất bại!",
+                                Toast.LENGTH_LONG)
+                        .show();
+                progressDialog.dismiss();
+                sendImageSuccess();
+            }).addOnSuccessListener(taskSnapshot -> {
+                taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
+                    // success
+                    String fileLink = task.getResult().toString();
+                    writeNewMessage(new Message(uid, fullName, fileLink, "image"));
+                });
+                progressDialog.dismiss();
+                sendImageSuccess();
+            });
+        } else {
+            String message = edtMessage.getText().toString().trim();
+            if (TextUtils.isEmpty(message)) {
+                return;
+            }
+            writeNewMessage(new Message(uid, fullName, message, "text"));
+
+
+            if (isFirst) {
+                initialUserChatList();
+                isFirst = false;
+            }
+
+            FirebaseHelper.sendMessageToTopic(ChatDetailActivity.this, new NotificationRequest(
+                    "Tin nhắn từ " + fullName,
+                    message,
+                    String.valueOf(account.getAccount_id()),
+                    1
+            ));
+
+            edtMessage.setText("");
         }
-        writeNewMessage(new Message(uid, fullName, message, "text"));
-
-
-        if (isFirst) {
-            initialUserChatList();
-            isFirst = false;
-        }
-
-        firebaseHelper.sendMessageToTopic(ChatDetailActivity.this, new NotificationRequest(
-                "Tin nhắn từ " + fullName,
-                message,
-                String.valueOf(account.getAccount_id()),
-                1
-        ));
-
-        edtMessage.setText("");
     }
 
     private void writeNewMessage(Message message) {
@@ -291,8 +325,7 @@ public class ChatDetailActivity extends BaseActivity {
     }
 
 
-    private void sellectPhoto()
-    {
+    private void sellectPhoto() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
@@ -310,16 +343,21 @@ public class ChatDetailActivity extends BaseActivity {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 rlPhoto.setVisibility(View.VISIBLE);
                 imageView.setImageBitmap(selectedImage);
-                recyclerChat.scrollToPosition(messageList.size() - 1);
-                btnTakePhoto.setVisibility(View.INVISIBLE);
-                edtMessage.setVisibility(View.INVISIBLE);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(ChatDetailActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
 
-        }else {
-            Toast.makeText(ChatDetailActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(ChatDetailActivity.this, "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void sendImageSuccess(){
+        recyclerChat.scrollToPosition(messageList.size() - 1);
+        btnTakePhoto.setVisibility(View.VISIBLE);
+        edtMessage.setVisibility(View.VISIBLE);
+        rlPhoto.setVisibility(View.GONE);
+        imageUri = null;
     }
 }

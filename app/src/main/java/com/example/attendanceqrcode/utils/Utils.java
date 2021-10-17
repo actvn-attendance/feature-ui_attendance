@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 
 public class Utils {
     public static boolean checkActiveQRCode(QrcodeUser qrcodeUser) {
+        System.out.println("user: "+ qrcodeUser.toString());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         return timestamp.after(qrcodeUser.getTimeBeganQrcode()) && timestamp.before(qrcodeUser.getQrcodeEndTime());
     }
@@ -114,8 +115,7 @@ public class Utils {
 
     public static void logOut(Activity activity) {
         int uid = getUserID(activity);
-        FirebaseHelper firebaseHelper = new FirebaseHelper();
-        firebaseHelper.unsubscribeTopic(String.valueOf(uid));
+        FirebaseHelper.unsubscribeTopic(String.valueOf(uid));
 
         clearUserData(activity);
     }
