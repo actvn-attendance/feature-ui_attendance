@@ -14,10 +14,10 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.attendanceqrcode.MainActivity;
 import com.example.attendanceqrcode.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.example.attendanceqrcode.MainActivity;
 
 public class AppFirebaseService extends FirebaseMessagingService {
     private static final String TAG = "AppFirebaseService";

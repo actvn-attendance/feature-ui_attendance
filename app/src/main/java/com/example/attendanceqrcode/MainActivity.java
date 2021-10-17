@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
 import com.example.attendanceqrcode.utils.AES;
 import com.example.attendanceqrcode.utils.AppConfigs;
+import com.example.attendanceqrcode.utils.FirebaseHelper;
 import com.example.attendanceqrcode.utils.GpsTracker;
 import com.example.attendanceqrcode.utils.Utils;
 import com.google.android.material.badge.BadgeDrawable;
@@ -62,7 +64,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     GpsTracker location;
     private long backPressdTime;
     Toast toast;
-    TextView tvTenSinhVien,tvMaSinhVien,imgProfile;
+    TextView tvTenSinhVien, tvMaSinhVien, imgProfile;
 
     Account account;
 
@@ -71,6 +73,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int FRAGMENT_CHAT = 3;
     private static final int FRAGMENT_NOTIFICATION = 4;
     private int currentFragment = FRAGMENT_CALENDAR;
+
+    private FirebaseHelper firebaseHelper = new FirebaseHelper();
 
 
     @Override
@@ -112,6 +116,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvTenSinhVien.setText(account.getFull_name());
         tvMaSinhVien.setText(account.getEmail());
 
+        firebaseHelper.subscribeTopic(MainActivity.this, String.valueOf(account.getAccount_id()));
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -149,15 +154,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-            Intent intent = new Intent(MainActivity.this,AccountDetailActivity.class);
-            intent.putExtra("student",account);
+            Intent intent = new Intent(MainActivity.this, AccountDetailActivity.class);
+            intent.putExtra("student", account);
             startActivity(intent);
 
         } else if (id == R.id.nav_change_pass) {
 
-        }else if (id == R.id.nav_log_out)
-        {
-            Intent intent = new Intent(MainActivity.this,DangNhapActivity.class);
+        } else if (id == R.id.nav_log_out) {
+            Utils.logOut(MainActivity.this);
+            Intent intent = new Intent(MainActivity.this, DangNhapActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
@@ -178,15 +183,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            if (backPressdTime+2000> System.currentTimeMillis())
-            {
+            if (backPressdTime + 2000 > System.currentTimeMillis()) {
                 toast.cancel();//thoat thi huy toast
                 super.onBackPressed();
                 return;
 
 
-            }else {
-                toast = Toast.makeText(this,"Press back again to exit the app",Toast.LENGTH_SHORT);
+            } else {
+                toast = Toast.makeText(this, "Press back again to exit the app", Toast.LENGTH_SHORT);
                 toast.show();
             }
 
@@ -253,7 +257,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 Utils.getToken(this), gsonObject)
                                 .enqueue(new Callback<ResponseAttendance>() {
                                     @Override
-                                    public void onResponse( Call<ResponseAttendance> call, Response<ResponseAttendance> response) {
+                                    public void onResponse(Call<ResponseAttendance> call, Response<ResponseAttendance> response) {
                                         int code = response.code();
                                         System.out.println(code);
                                         if (code == 200) {
@@ -270,7 +274,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                     }
 
                                     @Override
-                                    public void onFailure( Call<ResponseAttendance> call, Throwable t) {
+                                    public void onFailure(Call<ResponseAttendance> call, Throwable t) {
                                         showFailureDialog("Đã xảy ra lỗi");
                                     }
                                 });

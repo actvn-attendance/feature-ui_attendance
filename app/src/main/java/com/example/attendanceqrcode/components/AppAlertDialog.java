@@ -8,6 +8,7 @@ import android.content.Intent;
 
 
 import com.example.attendanceqrcode.DangNhapActivity;
+import com.example.attendanceqrcode.utils.Utils;
 
 import java.util.concurrent.Callable;
 
@@ -58,6 +59,7 @@ public class AppAlertDialog {
     }
 
     private static  void logout(Activity activity) {
+        Utils.logOut(activity);
         activity.startActivity(new Intent(activity, DangNhapActivity.class));
         activity.finish();
     }

@@ -12,6 +12,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.attendanceqrcode.model.QrcodeUser;
+import com.example.attendanceqrcode.modelapi.Account;
+import com.google.gson.Gson;
 
 import java.sql.Timestamp;
 
@@ -55,13 +57,13 @@ public class Utils {
         return sharedPreferences.getString("fullName", "");
     }
 
-    public static String getPersonalID(Activity activity, int otherUserID){
+    public static String getPersonalID(Activity activity, int otherUserID) {
         int uid = getUserID(activity);
-        if(uid < otherUserID){
-            return uid+"_"+otherUserID;
+        if (uid < otherUserID) {
+            return uid + "_" + otherUserID;
         }
 
-        return otherUserID+"_"+uid;
+        return otherUserID + "_" + uid;
     }
 
     public static boolean checkGPSPermission(Activity activity, Context context) {
@@ -97,5 +99,29 @@ public class Utils {
         System.out.println(">>> lat: " + gpsTracker.getLatitude());
         System.out.println(">>> long: " + gpsTracker.getLongitude());
         return null;
+    }
+
+    public static Account getLocalAccount(Activity activity) {
+        SharedPreferences mPrefs = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("account", "");
+        if (json != null && !json.isEmpty()) {
+            Account obj = gson.fromJson(json, Account.class);
+            return obj;
+        }
+        return null;
+    }
+
+    public static void logOut(Activity activity) {
+        int uid = getUserID(activity);
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        firebaseHelper.unsubscribeTopic(String.valueOf(uid));
+
+        clearUserData(activity);
+    }
+
+    public static void clearUserData(Activity activity) {
+        SharedPreferences mPrefs = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
+        mPrefs.edit().clear().apply();
     }
 }

@@ -106,6 +106,8 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
                                     editor.putString("password", password);
                                     editor.putInt("uid", postResult.getAccount().getAccount_id());
                                     editor.putString("fullName", postResult.getAccount().getFull_name());
+                                    editor.putString("account", postResult.getAccount().toJsonString());
+
                                     editor.commit();
 
                                     Intent iHome = new Intent(DangNhapActivity.this, MainActivity.class);

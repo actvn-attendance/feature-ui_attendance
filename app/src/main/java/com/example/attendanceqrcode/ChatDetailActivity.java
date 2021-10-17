@@ -19,7 +19,9 @@ import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.MessageAdapter;
 import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.model.Message;
+import com.example.attendanceqrcode.model.NotificationRequest;
 import com.example.attendanceqrcode.modelapi.Account;
+import com.example.attendanceqrcode.utils.FirebaseHelper;
 import com.example.attendanceqrcode.utils.Utils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +53,7 @@ public class ChatDetailActivity extends BaseActivity {
     private long uid;
     private final Date now = new Date();
     private boolean isFirst = true;
+    private FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     ChildEventListener chatListener = new ChildEventListener() {
         @Override
@@ -130,12 +133,7 @@ public class ChatDetailActivity extends BaseActivity {
             checkKeyBoard();
         });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        btnBack.setOnClickListener(view -> finish());
 
     }
 
@@ -146,10 +144,18 @@ public class ChatDetailActivity extends BaseActivity {
         }
         writeNewMessage(new Message(uid, fullName, message, "text"));
 
+
         if (isFirst) {
             initialUserChatList();
             isFirst = false;
         }
+
+        firebaseHelper.sendMessageToTopic(ChatDetailActivity.this, new NotificationRequest(
+                "Tin nhắn từ " + fullName,
+                message,
+                String.valueOf(account.getAccount_id()),
+                1
+        ));
 
         edtMessage.setText("");
     }

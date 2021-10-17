@@ -16,10 +16,13 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.attendanceqrcode.ChatDetailActivity;
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.MessageAdapter;
 import com.example.attendanceqrcode.model.Message;
+import com.example.attendanceqrcode.model.NotificationRequest;
 import com.example.attendanceqrcode.modelapi.Subject;
+import com.example.attendanceqrcode.utils.FirebaseHelper;
 import com.example.attendanceqrcode.utils.Utils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -142,6 +145,7 @@ public class ChatClassFragment extends Fragment {
             return;
         }
         writeNewMessage(new Message(uid, fullName, message, "text"));
+
         edtMessage.setText("");
     }
 

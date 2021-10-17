@@ -2,6 +2,7 @@ package com.example.attendanceqrcode.api;
 
 
 import com.example.attendanceqrcode.middleware.UnauthorizedInterceptor;
+import com.example.attendanceqrcode.model.NotificationRequest;
 import com.example.attendanceqrcode.modelapi.Account;
 import com.example.attendanceqrcode.modelapi.AttendanceStatistics;
 import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
@@ -34,7 +35,7 @@ public interface ApiService {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("http://5744-1-52-127-26.ngrok.io/")
+            .baseUrl("http://0b31-27-72-105-40.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(AddLoggingInterceptor.setLogging())
             .build()
@@ -82,6 +83,10 @@ public interface ApiService {
     @GET("api/attendance/history-attendance-user")
     Call<List<HistoryAttendanceUser>> getHistoryAttendance(@Header("Authorization") String accessToken,
                                                            @Query("subject_id") int subject_id);
+
+    // push notification with topic
+    @POST("api/notification/topic")
+    Call<Object> pushNotificationTopic(@Header("Authorization") String accessToken, @Body NotificationRequest notificationRequest);
 
 
 //    //phuong thuc get(lay thong ke diem danh)

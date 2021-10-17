@@ -3,6 +3,8 @@ package com.example.attendanceqrcode.modelapi;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -54,6 +56,13 @@ public class Account implements Serializable {
         this.created_date = created_date;
         this.active_flg = active_flg;
         this.roles = roles;
+    }
+
+
+    public String toJsonString(){
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        return json;
     }
 
     public int getAccount_id() {

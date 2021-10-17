@@ -4,6 +4,8 @@ package com.example.attendanceqrcode.modelapi;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 public class InfoUser implements Serializable {
@@ -19,6 +21,7 @@ public class InfoUser implements Serializable {
         this.token_type = token_type;
         this.account = account;
     }
+
 
     public String getAccess_token() {
         return access_token;
