@@ -75,6 +75,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.tvMessage.setVisibility(View.GONE);
         }
 
+        holder.setIsRecyclable(false);
+
 
 
     }
