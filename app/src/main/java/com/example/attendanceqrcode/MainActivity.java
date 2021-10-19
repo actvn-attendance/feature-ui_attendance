@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         badge.setBackgroundColor(Color.RED);
         badge.setNumber(2);
 
-        account = (Account) getIntent().getSerializableExtra("student");
+        account = Utils.getLocalAccount(MainActivity.this);
         tvTenSinhVien.setText(account.getFull_name());
         tvMaSinhVien.setText(account.getEmail());
 
