@@ -335,7 +335,6 @@ public class ChatDetailActivity extends BaseActivity {
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
 
-
         if (resultCode == RESULT_OK) {
             try {
                 imageUri = data.getData();

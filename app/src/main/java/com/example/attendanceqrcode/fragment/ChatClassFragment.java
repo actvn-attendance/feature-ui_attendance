@@ -2,6 +2,7 @@ package com.example.attendanceqrcode.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,6 +38,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -61,14 +64,14 @@ public class ChatClassFragment extends Fragment {
     List<Message> messageList;
     EditText edtMessage;
     ImageButton btnSend;
-    ImageView btnTakePhoto,imageView,imgDeletePhoto;
+    ImageView btnTakePhoto, imageView, imgDeletePhoto;
     RelativeLayout rlPhoto;
 
     private Subject subject;
     private DatabaseReference classChatDB, messageDB;
     private String fullName;
     private long uid;
-    public static  int RESULT_LOAD_IMG = 101;
+    public static int RESULT_LOAD_IMG = 101;
     public Uri imageUri;
 
     @SuppressLint("RestrictedApi")
@@ -178,13 +181,39 @@ public class ChatClassFragment extends Fragment {
     }
 
     private void sendMessage() {
-        String message = edtMessage.getText().toString().trim();
-        if (TextUtils.isEmpty(message)) {
-            return;
-        }
-        writeNewMessage(new Message(uid, fullName, message, "text"));
+        if (imageUri != null) {
+            ProgressDialog progressDialog
+                    = new ProgressDialog(getContext());
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/groups/" + subject.getId() + "/" + imageUri.getLastPathSegment());
 
-        edtMessage.setText("");
+            storageRef.putFile(imageUri).addOnFailureListener(exception -> {
+                Toast
+                        .makeText(getActivity(),
+                                "Gửi thất bại!",
+                                Toast.LENGTH_LONG)
+                        .show();
+                progressDialog.dismiss();
+                sendImageSuccess();
+            }).addOnSuccessListener(taskSnapshot -> {
+                taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
+                    // success
+                    String fileLink = task.getResult().toString();
+                    writeNewMessage(new Message(uid, fullName, fileLink, "image"));
+                });
+                progressDialog.dismiss();
+                sendImageSuccess();
+            });
+        } else {
+            String message = edtMessage.getText().toString().trim();
+            if (TextUtils.isEmpty(message)) {
+                return;
+            }
+            writeNewMessage(new Message(uid, fullName, message, "text"));
+
+            edtMessage.setText("");
+        }
     }
 
     private void writeNewMessage(Message message) {
@@ -221,8 +250,7 @@ public class ChatClassFragment extends Fragment {
         });
     }
 
-    private void sellectPhoto()
-    {
+    private void sellectPhoto() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
@@ -248,9 +276,17 @@ public class ChatClassFragment extends Fragment {
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
 
-        }else {
-            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void sendImageSuccess(){
+        recyclerChat.scrollToPosition(messageList.size() - 1);
+        btnTakePhoto.setVisibility(View.VISIBLE);
+        edtMessage.setVisibility(View.VISIBLE);
+        rlPhoto.setVisibility(View.GONE);
+        imageUri = null;
     }
 
 }
