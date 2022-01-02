@@ -4,17 +4,20 @@
     <item android:id="@+id/bottom_calendar"
         android:title="@string/calendar"
         android:icon="@drawable/ic_calendar"/>
+
+    <item android:id="@+id/bottom_attendance"
+        android:title=""/>
     <item android:id="@+id/bottom_class"
         android:title="@string/classroom"
         android:icon="@drawable/ic_class"/>
-    <item android:id="@+id/bottom_attendance"
-        android:title=""/>
 
     <item android:id="@+id/bottom_chat"
         android:title="@string/chat"
-        android:icon="@drawable/ic_message"/>
+        android:icon="@drawable/ic_message"
+        android:visible="false"/>
 
     <item android:id="@+id/bottom_notification"
         android:title="@string/notification"
-        android:icon="@drawable/ic_notifications"/>
+        android:icon="@drawable/ic_notifications"
+        android:visible="false"/>
 </menu>

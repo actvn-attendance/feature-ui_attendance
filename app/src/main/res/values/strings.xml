@@ -2,7 +2,7 @@
     <string name="app_name">KMA QRCODE</string>
 <!--    <string name="project_id">ACT Attendance</string>-->
 
-    <string name="calendar">Calendar</string>
+    <string name="calendar">Lịch học</string>
     <string name="attendance">Attendance</string>
     <string name="chat">Chat</string>
     <string name="notification">Notification</string>
@@ -10,7 +10,7 @@
     <string name="resetpassword">Change Password</string>
     <string name="logout">Log out</string>
     <string name="home">Home</string>
-    <string name="classroom">Class</string>
+    <string name="classroom">Lớp học</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
