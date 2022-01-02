@@ -28,9 +28,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         {
             case 0:
                 return new InfomationClassFragment(subject);
+//            case 1:
+//                return new ChatClassFragment(subject);
             case 1:
-                return new ChatClassFragment(subject);
-            case 2:
                 return new HistoryAttendanceFragment(subject);
                 default:
                     return new InfomationClassFragment(subject);
@@ -40,7 +40,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -53,10 +53,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 title = "Thông tin lớp";
                 break;
+//            case 1:
+//                title = "Trò chuyện";
+//                break;
             case 1:
-                title = "Trò chuyện";
-                break;
-            case 2:
                 title = "Lịch sử điểm danh";
                 break;
         }

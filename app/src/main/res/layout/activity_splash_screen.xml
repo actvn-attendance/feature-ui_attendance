@@ -5,17 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity"
-    android:background="@color/background"
+    android:background="@drawable/bg_dangnhap"
     android:gravity="center"
     android:orientation="vertical"
     >
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_background"
-        android:scaleType="fitCenter"
-        android:layout_marginLeft="15dp"/>
+    <TextView
+        android:id="@+id/txt_welcome"
+        android:layout_above="@id/ll_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-kma QRcode-"
+        android:textSize="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/damion_regular"
+        android:textAlignment="center"
+        android:textColor="#3F51B5"/>
 
     <ProgressBar
         android:id="@+id/processbar_screen"

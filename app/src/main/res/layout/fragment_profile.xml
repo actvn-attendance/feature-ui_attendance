@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AccountDetailActivity"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:src="@drawable/image_group_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                />
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="20dp">
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Họ tên: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp" />
+                    <TextView
+                        android:id="@+id/tv_ten_sinhvien"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Ngày sinh: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:id="@+id/tv_ngaysinh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Mã SV: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:id="@+id/tv_masv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Số CMND: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:id="@+id/tv_so_cmnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:singleLine="true"
+                        android:text="Địa chỉ: "
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:layout_toEndOf="@id/tv_title"
+                        android:id="@+id/tv_dia_chi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Giới tính: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nam"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Email: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:id="@+id/tv_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="SĐT: "
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+                    <TextView
+                        android:id="@+id/tv_sdt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nguyễn Văn A"
+                        android:singleLine="true"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="64dp"
+                android:id="@+id/btn_chat"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textSize="18dp"
+                android:textAllCaps="false"
+                android:background="@drawable/bg_buttonlogin"
+                android:text="Nhắn tin"
+                />
+
+            <Button
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textSize="18dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:background="#E14D4D"
+                android:text="Đăng xuất"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+
+
+</LinearLayout>

@@ -28,6 +28,7 @@ import com.example.attendanceqrcode.fragment.CalendarFragment;
 import com.example.attendanceqrcode.fragment.ChatFragment;
 import com.example.attendanceqrcode.fragment.ClassFragment;
 import com.example.attendanceqrcode.fragment.NotificationFragment;
+import com.example.attendanceqrcode.fragment.ProfileFragment;
 import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.model.QrcodeUser;
 import com.example.attendanceqrcode.modelapi.Account;
@@ -54,7 +55,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity {
 
     DrawerLayout drawerLayout;
     Toolbar toolbar;
@@ -72,6 +73,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int FRAGMENT_CLASS = 1;
     private static final int FRAGMENT_CHAT = 3;
     private static final int FRAGMENT_NOTIFICATION = 4;
+    private static final int FRAGMENT_PROFILE = 5;
     private int currentFragment = FRAGMENT_CALENDAR;
 
 
@@ -82,12 +84,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolBar);
-        navigationView = findViewById(R.id.navigation_view);
+//        navigationView = findViewById(R.id.navigation_view);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         floatingActionButton = findViewById(R.id.fab);
-        View headerLayout = navigationView.getHeaderView(0);
-        tvTenSinhVien = headerLayout.findViewById(R.id.tv_ten_sinhvien);
-        tvMaSinhVien = headerLayout.findViewById(R.id.tv_ma_sv);
+//        View headerLayout = navigationView.getHeaderView(0);
+//        tvTenSinhVien = headerLayout.findViewById(R.id.tv_ten_sinhvien);
+//        tvMaSinhVien = headerLayout.findViewById(R.id.tv_ma_sv);
         setSupportActionBar(toolbar);
 
         bottomNavigationView.setBackground(null);
@@ -96,31 +98,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_qr_code_scanner_24));
 
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+//                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawerLayout.addDrawerListener(toggle);
+//        toggle.syncState();
+//        navigationView.setNavigationItemSelectedListener(this);
 
-        replaceFragment(new CalendarFragment());
-        bottomNavigationView.getMenu().findItem(R.id.bottom_calendar).setChecked(true);
+        replaceFragment(new ClassFragment());
+        bottomNavigationView.getMenu().findItem(R.id.bottom_class).setChecked(true);
 
-        int menuItemId = bottomNavigationView.getMenu().getItem(4).getItemId();
+        int menuItemId = bottomNavigationView.getMenu().getItem(3).getItemId();
         BadgeDrawable badge = bottomNavigationView.getOrCreateBadge(menuItemId);
         badge.setBackgroundColor(Color.RED);
         badge.setNumber(2);
 
         account = Utils.getLocalAccount(MainActivity.this);
-        tvTenSinhVien.setText(account.getFull_name());
-        tvMaSinhVien.setText(account.getEmail());
+//        tvTenSinhVien.setText(account.getFull_name());
+//        tvMaSinhVien.setText(account.getEmail());
 
         FirebaseHelper.subscribeTopic(MainActivity.this, String.valueOf(account.getAccount_id()));
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.bottom_calendar) {
-                openFragment(FRAGMENT_CALENDAR, new CalendarFragment());
-            } else if (id == R.id.bottom_class) {
+//            if (id == R.id.bottom_calendar) {
+//                openFragment(FRAGMENT_CALENDAR, new CalendarFragment());
+//            } else
+            if (id == R.id.bottom_class) {
                 openFragment(FRAGMENT_CLASS, new ClassFragment());
             } else if (id == R.id.bottom_chat) {
                 openFragment(FRAGMENT_CHAT, new ChatFragment());
@@ -128,6 +131,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 badge.setBackgroundColor(Color.WHITE);
                 badge.clearNumber();
                 openFragment(FRAGMENT_NOTIFICATION, new NotificationFragment());
+            } else if (id == R.id.bottom_profile) {
+                openFragment(FRAGMENT_PROFILE, new ProfileFragment());
             }
             return true;
         });
@@ -147,27 +152,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_account) {
-            Intent intent = new Intent(MainActivity.this, AccountDetailActivity.class);
-            intent.putExtra("student", account);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_change_pass) {
-
-        } else if (id == R.id.nav_log_out) {
-            Utils.logOut(MainActivity.this);
-            Intent intent = new Intent(MainActivity.this, DangNhapActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_account) {
+//            Intent intent = new Intent(MainActivity.this, AccountDetailActivity.class);
+//            intent.putExtra("student", account);
+//            startActivity(intent);
+//
+//        } else if (id == R.id.nav_change_pass) {
+//
+//        } else if (id == R.id.nav_log_out) {
+//            Utils.logOut(MainActivity.this);
+//            Intent intent = new Intent(MainActivity.this, DangNhapActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//        }
+//
+//        drawerLayout.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
     private void openFragment(int fragmentSelect, Fragment fragment) {
         if (currentFragment != fragmentSelect) {

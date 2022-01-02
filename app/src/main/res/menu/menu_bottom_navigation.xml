@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/bottom_calendar"
-        android:title="@string/calendar"
-        android:icon="@drawable/ic_calendar"/>
+<!--    <item android:id="@+id/bottom_calendar"-->
+<!--        android:title="@string/calendar"-->
+<!--        android:icon="@drawable/ic_calendar"-->
+<!--        android:visible="false"/>-->
     <item android:id="@+id/bottom_class"
         android:title="@string/classroom"
         android:icon="@drawable/ic_class"/>
-    <item android:id="@+id/bottom_attendance"
-        android:title=""/>
-
     <item android:id="@+id/bottom_chat"
         android:title="@string/chat"
         android:icon="@drawable/ic_message"/>
+    <item android:id="@+id/bottom_attendance"
+        android:title=""/>
 
     <item android:id="@+id/bottom_notification"
         android:title="@string/notification"
         android:icon="@drawable/ic_notifications"/>
+    <item android:id="@+id/bottom_profile"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_profile"/>
+
 </menu>
