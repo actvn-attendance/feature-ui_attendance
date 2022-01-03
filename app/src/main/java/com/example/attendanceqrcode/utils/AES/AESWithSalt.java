@@ -45,7 +45,6 @@ public class AESWithSalt {
             keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
             SecretKey tempKey = keyFactory.generateSecret(pbeKeySpec);
             SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
-
             SharedPreferenceHelper.set(
                     SharedPreferenceHelper.secretKey,
                     Base64.encodeToString(secretKey.getEncoded(), Base64.DEFAULT));

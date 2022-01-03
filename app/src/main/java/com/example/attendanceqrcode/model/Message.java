@@ -1,5 +1,7 @@
 package com.example.attendanceqrcode.model;
 
+import com.example.attendanceqrcode.utils.AES.AESNormal;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +14,7 @@ public class Message {
     private String type;
     private String created;
 
-    public Message(HashMap mapMessage){
+    public Message(HashMap mapMessage) {
         this.message = (String) mapMessage.get("message");
         this.uid = (long) mapMessage.get("uid");
         this.fullName = (String) mapMessage.get("fullName");
@@ -21,15 +23,16 @@ public class Message {
         this.created = (String) mapMessage.get("created");
     }
 
-    public Message(long uid, String fullName, String message, String type) {
+    public Message(String smsPrivateKey, long uid, String fullName, String message, String type) {
         this.uid = uid;
         this.fullName = fullName;
-        this.message = message;
         this.type = type;
-    }
 
-    public Message(String message){
-        this.message = message;
+        if (smsPrivateKey != null && !smsPrivateKey.isEmpty()) {
+            this.message = AESNormal.encrypt(message, smsPrivateKey);
+        } else {
+            this.message = message;
+        }
     }
 
     public Map<String, Object> toMap() {
@@ -44,8 +47,16 @@ public class Message {
         return result;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMessage(String smsPrivateKey) {
+        if (smsPrivateKey != null && !smsPrivateKey.isEmpty()) {
+            try {
+                return AESNormal.decrypt(message, smsPrivateKey);
+            }catch (Exception e){
+                return message;
+            }
+        } else {
+            return message;
+        }
     }
 
     public void setMessage(String message) {

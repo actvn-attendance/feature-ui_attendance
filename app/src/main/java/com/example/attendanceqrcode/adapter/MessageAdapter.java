@@ -29,6 +29,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private FragmentActivity activity;
     private List<Message> messageList;
     private int uid;
+    private  String smsPrivateKey;
+
+    public MessageAdapter(FragmentActivity activity, List<Message> messageList, String smsPrivateKey) {
+        this.activity = activity;
+        this.messageList = messageList;
+        this.uid = Utils.getUserID(activity);
+        this.smsPrivateKey = smsPrivateKey;
+    }
 
     public MessageAdapter(FragmentActivity activity, List<Message> messageList) {
         this.activity = activity;
@@ -52,21 +60,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.layoutCompat.setGravity(Gravity.END);
             holder.tvMessage.setBackgroundResource(R.drawable.bg_mesage_user);
             holder.tvFullName.setVisibility(View.GONE);
-            holder.tvMessage.setText(message.getMessage());
+            holder.tvMessage.setText(message.getMessage(smsPrivateKey));
         } else {
             holder.layoutCompat.setGravity(Gravity.START);
             holder.tvMessage.setBackgroundResource(R.drawable.bg_message_other);
             holder.tvFullName.setVisibility(View.VISIBLE);
             holder.tvFullName.setText(message.getFullName());
-            holder.tvMessage.setText(message.getMessage());
+            holder.tvMessage.setText(message.getMessage(smsPrivateKey));
         }
 
         if (message.getType().contains("text")) {
-            holder.tvMessage.setText(message.getMessage());
+            holder.tvMessage.setText(message.getMessage(smsPrivateKey));
             holder.imageView.setVisibility(View.GONE);
         } else if (message.getType().contains("image")) {
             holder.imageView.setVisibility(View.VISIBLE);
-            String url = message.getMessage();
+            String url = message.getMessage(smsPrivateKey);
             Glide
                     .with(activity)
                     .load(url)

@@ -9,13 +9,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.User;
 import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
+import com.example.attendanceqrcode.utils.diffie_hellman.DiffieHellman;
 import com.example.attendanceqrcode.utils.secure.SecureServices;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -26,6 +36,9 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -43,6 +56,8 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
     ProgressBar progressBar;
     private long backPressdTime;
     Toast toast;
+
+    private DatabaseReference userPublicKeysDB;
 
     @Override
     protected void handleUnauthorizedEvent() {
@@ -102,35 +117,8 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
                             public void onResponse(Call<InfoUser> call, Response<InfoUser> response) {
                                 InfoUser postResult = response.body();
 
-
                                 if (postResult != null) {
-                                    /// Sign in is successfully
-                                    /// -> if(api >= 18) Create Android KeyStore
-                                    /// -> create master key: secret key and RSA key of Android Keystore
-                                    /// note: if(api < 18) -> use generate aes key by user password
-                                    /// -> if(api >= 23) use Android Keystore to generate/save/get secret key
-                                    /// -> (18<= api < 23) -> wrap secret key by public key and unwrap by private key
-                                    /// -> api < 18 -> save secret key to local storage
-                                    try {
-                                        new SecureServices(getApplicationContext()).createMasterKey(postResult.getAccount().getPassword());
-
-                                        SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.tokenKey, postResult.getAccess_token());
-                                        SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.fullNameKey, postResult.getAccount().getFull_name());
-                                        SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.accountKey, postResult.getAccount().toJsonString());
-
-                                        SharedPreferenceHelper.set(SharedPreferenceHelper.uidKey, String.valueOf(postResult.getAccount().getAccount_id()));
-                                    } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException
-                                            | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException
-                                            | InvalidKeySpecException | CertificateException | KeyStoreException
-                                            | IOException | NoSuchPaddingException e) {
-                                        e.printStackTrace();
-                                    }  catch (UnrecoverableKeyException e) {
-                                        e.printStackTrace();
-                                    } catch (BadPaddingException e) {
-                                        e.printStackTrace();
-                                    }
-
-
+                                    initialKeysAndSaveData(postResult);
                                     Intent iHome = new Intent(DangNhapActivity.this, MainActivity.class);
                                     iHome.putExtra("student", postResult.getAccount());
                                     startActivity(iHome);
@@ -167,5 +155,62 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
         }
 
         backPressdTime = System.currentTimeMillis();
+    }
+
+    void initialKeysAndSaveData(InfoUser postResult) {
+        /// Sign in is successfully
+        /// -> if(api >= 18) Create Android KeyStore
+        /// -> create master key: secret key and RSA key of Android Keystore
+        /// note: if(api < 18) -> use generate aes key by user password
+        /// -> if(api >= 23) use Android Keystore to generate/save/get secret key
+        /// -> (18<= api < 23) -> wrap secret key by public key and unwrap by private key
+        /// -> api < 18 -> save secret key to local storage
+        try {
+            new SecureServices(getApplicationContext()).createMasterKey(postResult.getAccount().getPassword());
+
+            // save data
+            SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.tokenKey, postResult.getAccess_token());
+            SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.fullNameKey, postResult.getAccount().getFull_name());
+            SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.accountKey, postResult.getAccount().toJsonString());
+            SharedPreferenceHelper.set(SharedPreferenceHelper.uidKey, String.valueOf(postResult.getAccount().getAccount_id()));
+
+            // sync public key to firebase
+            syncPublicKeyUserToFirebase(postResult.getAccount().getAccount_id());
+        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException
+                | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException
+                | InvalidKeySpecException | CertificateException | KeyStoreException
+                | IOException | NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void syncPublicKeyUserToFirebase(int uid) {
+        userPublicKeysDB = FirebaseDatabase.getInstance().getReference().child("userPublicKeys");
+        userPublicKeysDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (!snapshot.hasChild(String.valueOf(uid))) {
+                    Map<String, Object> postValues = new HashMap<>();
+
+                    postValues.put("id", uid);
+                    postValues.put("publicKey", new DiffieHellman().generatePublicKey());
+                    postValues.put("createAt", new Date().getTime());
+
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/" + uid, postValues);
+                    userPublicKeysDB.updateChildren(childUpdates);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
     }
 }

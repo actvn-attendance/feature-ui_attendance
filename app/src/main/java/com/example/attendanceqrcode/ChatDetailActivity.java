@@ -30,6 +30,7 @@ import com.example.attendanceqrcode.model.NotificationRequest;
 import com.example.attendanceqrcode.modelapi.Account;
 import com.example.attendanceqrcode.utils.FirebaseHelper;
 import com.example.attendanceqrcode.utils.Utils;
+import com.example.attendanceqrcode.utils.diffie_hellman.DiffieHellman;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -67,11 +68,14 @@ public class ChatDetailActivity extends BaseActivity {
     public Uri imageUri;
 
     Account account;
-    private DatabaseReference personalChatDB, meChatListDB, userChatListDB;
+    private DatabaseReference personalChatDB, meChatListDB, userChatListDB, userPublicKeysDB;
     private String fullName, chatID;
     private long uid;
     private final Date now = new Date();
     private boolean isFirst = true;
+
+    private String smsPrivateKey = "";
+    private DiffieHellman diffieHellman = new DiffieHellman();
 
     ChildEventListener chatListener = new ChildEventListener() {
         @Override
@@ -83,7 +87,6 @@ public class ChatDetailActivity extends BaseActivity {
                 messageAdapter.notifyDataSetChanged();
 
                 recyclerChat.scrollToPosition(messageList.size() - 1);
-
 
             }
         }
@@ -129,6 +132,7 @@ public class ChatDetailActivity extends BaseActivity {
 
         meChatListDB = FirebaseDatabase.getInstance().getReference().child("userChatList").child(String.valueOf(uid));
         userChatListDB = FirebaseDatabase.getInstance().getReference().child("userChatList").child(String.valueOf(account.getAccount_id()));
+        userPublicKeysDB = FirebaseDatabase.getInstance().getReference().child("userPublicKeys").child(String.valueOf(account.getAccount_id()));
 
         recyclerChat = findViewById(R.id.recyclerChat);
         edtMessage = findViewById(R.id.edt_message);
@@ -143,10 +147,31 @@ public class ChatDetailActivity extends BaseActivity {
         txtTitle.setText(account.getFull_name());
 
         messageList = new ArrayList<>();
-        messageAdapter = new MessageAdapter(this, messageList);
+        messageAdapter = new MessageAdapter(this, messageList, smsPrivateKey);
         recyclerChat.setHasFixedSize(true);
         recyclerChat.setAdapter(messageAdapter);
         messageAdapter.notifyDataSetChanged();
+
+        userPublicKeysDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    HashMap mapMessage = (HashMap) snapshot.getValue();
+                    try {
+                        int publicKeyUser = (int) mapMessage.get("publicKey");
+                        smsPrivateKey = diffieHellman.generateKey(publicKeyUser);
+                    } catch (Exception e) {
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
 
 
         btnSend.setOnClickListener(view -> {
@@ -159,24 +184,13 @@ public class ChatDetailActivity extends BaseActivity {
 
         btnBack.setOnClickListener(view -> finish());
 
+        btnTakePhoto.setOnClickListener(v -> sellectPhoto());
 
-        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sellectPhoto();
-
-            }
-        });
-
-        imgDeletePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageUri = null;
-                rlPhoto.setVisibility(View.GONE);
-                btnTakePhoto.setVisibility(View.VISIBLE);
-                edtMessage.setVisibility(View.VISIBLE);
-
-            }
+        imgDeletePhoto.setOnClickListener(v -> {
+            imageUri = null;
+            rlPhoto.setVisibility(View.GONE);
+            btnTakePhoto.setVisibility(View.VISIBLE);
+            edtMessage.setVisibility(View.VISIBLE);
         });
 
     }
@@ -201,18 +215,17 @@ public class ChatDetailActivity extends BaseActivity {
                 taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
                     // success
                     String fileLink = task.getResult().toString();
-                    writeNewMessage(new Message(uid, fullName, fileLink, "image"));
+                    writeNewMessage(new Message(smsPrivateKey, uid, fullName, fileLink, "image"));
                 });
                 progressDialog.dismiss();
                 sendImageSuccess();
             });
         } else {
-            String message = edtMessage.getText().toString().trim();
-            if (TextUtils.isEmpty(message)) {
+            String clearText = edtMessage.getText().toString().trim();
+            if (TextUtils.isEmpty(clearText)) {
                 return;
             }
-            writeNewMessage(new Message(uid, fullName, message, "text"));
-
+            writeNewMessage(new Message(smsPrivateKey, uid, fullName, clearText, "text"));
 
             if (isFirst) {
                 initialUserChatList();
@@ -221,7 +234,7 @@ public class ChatDetailActivity extends BaseActivity {
 
             FirebaseHelper.sendMessageToTopic(ChatDetailActivity.this, new NotificationRequest(
                     "Tin nhắn từ " + fullName,
-                    message,
+                    clearText,
                     String.valueOf(account.getAccount_id()),
                     1
             ));
@@ -247,7 +260,7 @@ public class ChatDetailActivity extends BaseActivity {
         meChatListDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                System.out.println(snapshot.hasChild(chatID));
+//                System.out.println(snapshot.hasChild(chatID));
                 if (!snapshot.hasChild(chatID)) {
                     Map<String, Object> postValues = new HashMap<>();
                     postValues.put("id", chatID);
@@ -352,7 +365,7 @@ public class ChatDetailActivity extends BaseActivity {
         }
     }
 
-    private void sendImageSuccess(){
+    private void sendImageSuccess() {
         recyclerChat.scrollToPosition(messageList.size() - 1);
         btnTakePhoto.setVisibility(View.VISIBLE);
         edtMessage.setVisibility(View.VISIBLE);

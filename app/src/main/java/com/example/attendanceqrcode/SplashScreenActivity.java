@@ -18,9 +18,11 @@ import androidx.core.content.ContextCompat;
 import com.example.attendanceqrcode.modelapi.Account;
 import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
 import com.example.attendanceqrcode.utils.Utils;
+import com.example.attendanceqrcode.utils.diffie_hellman.DiffieHellman;
 import com.example.attendanceqrcode.utils.secure.SecureServices;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -47,7 +49,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             Account account = Utils.getLocalAccount(SplashScreenActivity.this);
-
             if (account != null) {
                 Intent iHome = new Intent(SplashScreenActivity.this, MainActivity.class);
                 iHome.putExtra("student", account);
