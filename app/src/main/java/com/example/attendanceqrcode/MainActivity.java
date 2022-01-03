@@ -1,10 +1,7 @@
 package com.example.attendanceqrcode;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -17,14 +14,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.components.AppAlertDialog;
-import com.example.attendanceqrcode.fragment.CalendarFragment;
 import com.example.attendanceqrcode.fragment.ChatFragment;
 import com.example.attendanceqrcode.fragment.ClassFragment;
 import com.example.attendanceqrcode.fragment.NotificationFragment;
@@ -32,13 +26,14 @@ import com.example.attendanceqrcode.fragment.ProfileFragment;
 import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.model.QrcodeUser;
 import com.example.attendanceqrcode.modelapi.Account;
-import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.ResponseAttendance;
-import com.example.attendanceqrcode.utils.AES;
+import com.example.attendanceqrcode.utils.AES.AESNormal;
 import com.example.attendanceqrcode.utils.AppConfigs;
 import com.example.attendanceqrcode.utils.FirebaseHelper;
 import com.example.attendanceqrcode.utils.GpsTracker;
+import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
 import com.example.attendanceqrcode.utils.Utils;
+import com.example.attendanceqrcode.utils.secure.SecureServices;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +45,20 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -113,8 +122,6 @@ public class MainActivity extends BaseActivity {
         badge.setNumber(2);
 
         account = Utils.getLocalAccount(MainActivity.this);
-//        tvTenSinhVien.setText(account.getFull_name());
-//        tvMaSinhVien.setText(account.getEmail());
 
         FirebaseHelper.subscribeTopic(MainActivity.this, String.valueOf(account.getAccount_id()));
 
@@ -232,7 +239,7 @@ public class MainActivity extends BaseActivity {
 
     private void handlingAttendance(String contents) {
         if (contents != null) {
-            String json = AES.decrypt(contents, AppConfigs.aesKey);
+            String json = AESNormal.decrypt(contents, AppConfigs.aesKey);
 
             try {
                 assert json != null;
@@ -249,7 +256,7 @@ public class MainActivity extends BaseActivity {
                         // success gps
                         // as well as attendance successfully
 //                        System.out.println(">>> uid: " + Utils.getAndroidID(getContentResolver()));
-                        String encryptCode = AES.encrypt(
+                        String encryptCode = AESNormal.encrypt(
                                 qrcodeUser.toRequestJSON(Utils.getAndroidID(getContentResolver()), location.getLatitude(), location.getLongitude()), AppConfigs.aesKey);
 
                         JSONObject jsonObject = new JSONObject();

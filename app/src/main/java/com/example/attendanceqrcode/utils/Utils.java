@@ -6,6 +6,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.os.Build;
 import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
@@ -13,13 +16,26 @@ import androidx.core.content.ContextCompat;
 
 import com.example.attendanceqrcode.model.QrcodeUser;
 import com.example.attendanceqrcode.modelapi.Account;
+import com.example.attendanceqrcode.utils.secure.SecureServices;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.Timestamp;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class Utils {
     public static boolean checkActiveQRCode(QrcodeUser qrcodeUser) {
-        System.out.println("user: "+ qrcodeUser.toString());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         return timestamp.after(qrcodeUser.getTimeBeganQrcode()) && timestamp.before(qrcodeUser.getQrcodeEndTime());
     }
@@ -43,19 +59,65 @@ public class Utils {
         return R * c;
     }
 
-    public static String getToken(Activity activity) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
+    public static String getToken(Context context) {
+        SharedPreferenceHelper.getInstance(context);
+        try {
+            return SharedPreferenceHelper.getDataEncrypted(SharedPreferenceHelper.tokenKey);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static int getUserID(Activity activity) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        return sharedPreferences.getInt("uid", -1);
+    public static int getUserID(Context context) {
+        SharedPreferenceHelper.getInstance(context);
+        return SharedPreferenceHelper.getInt(SharedPreferenceHelper.uidKey);
     }
 
-    public static String getUserFullName(Activity activity) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("fullName", "");
+    public static String getUserFullName(Context context) {
+        SharedPreferenceHelper.getInstance(context);
+        try {
+            return SharedPreferenceHelper.getDataEncrypted(SharedPreferenceHelper.fullNameKey);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static String getPersonalID(Activity activity, int otherUserID) {
@@ -97,18 +159,39 @@ public class Utils {
         } else {
             gpsTracker.showSettingsAlert();
         }
-        System.out.println(">>> lat: " + gpsTracker.getLatitude());
-        System.out.println(">>> long: " + gpsTracker.getLongitude());
         return null;
     }
 
-    public static Account getLocalAccount(Activity activity) {
-        SharedPreferences mPrefs = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
+    public static Account getLocalAccount(Context context) {
+        SharedPreferenceHelper.getInstance(context);
         Gson gson = new Gson();
-        String json = mPrefs.getString("account", "");
+        String json = null;
+        try {
+            json = SharedPreferenceHelper.getDataEncrypted(SharedPreferenceHelper.accountKey);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+
         if (json != null && !json.isEmpty()) {
-            Account obj = gson.fromJson(json, Account.class);
-            return obj;
+            return gson.fromJson(json, Account.class);
         }
         return null;
     }
@@ -116,12 +199,36 @@ public class Utils {
     public static void logOut(Activity activity) {
         int uid = getUserID(activity);
         FirebaseHelper.unsubscribeTopic(String.valueOf(uid));
-
         clearUserData(activity);
     }
 
-    public static void clearUserData(Activity activity) {
-        SharedPreferences mPrefs = activity.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        mPrefs.edit().clear().apply();
+    public static void clearUserData(Context context) {
+        SharedPreferenceHelper.getInstance(context);
+        SharedPreferenceHelper.clearData();
+        try {
+            new SecureServices(context).removeMasterKey();
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isInternetAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // For 29 api or above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (capabilities == null) return false;
+
+            return
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+
+        }
+        // For below 29 api
+
+        return connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }

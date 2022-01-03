@@ -1,11 +1,7 @@
 package com.example.attendanceqrcode;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,18 +9,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.middleware.BaseActivity;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.User;
-import com.example.attendanceqrcode.services.AppFirebaseService;
-import com.example.attendanceqrcode.utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
+import com.example.attendanceqrcode.utils.secure.SecureServices;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,21 +102,37 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
                             public void onResponse(Call<InfoUser> call, Response<InfoUser> response) {
                                 InfoUser postResult = response.body();
 
-                                if (postResult != null) {
-                                    Log.d("kiemtra1", postResult.toString() + "");
-                                    SharedPreferences sharedPreferences = getSharedPreferences("Account", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("token", postResult.getAccess_token());
-                                    editor.putString("username", username);
-                                    editor.putString("password", password);
-                                    editor.putInt("uid", postResult.getAccount().getAccount_id());
-                                    editor.putString("fullName", postResult.getAccount().getFull_name());
-                                    editor.putString("account", postResult.getAccount().toJsonString());
 
-                                    editor.commit();
+                                if (postResult != null) {
+                                    /// Sign in is successfully
+                                    /// -> if(api >= 18) Create Android KeyStore
+                                    /// -> create master key: secret key and RSA key of Android Keystore
+                                    /// note: if(api < 18) -> use generate aes key by user password
+                                    /// -> if(api >= 23) use Android Keystore to generate/save/get secret key
+                                    /// -> (18<= api < 23) -> wrap secret key by public key and unwrap by private key
+                                    /// -> api < 18 -> save secret key to local storage
+                                    try {
+                                        new SecureServices(getApplicationContext()).createMasterKey(postResult.getAccount().getPassword());
+
+                                        SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.tokenKey, postResult.getAccess_token());
+                                        SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.fullNameKey, postResult.getAccount().getFull_name());
+                                        SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.accountKey, postResult.getAccount().toJsonString());
+
+                                        SharedPreferenceHelper.set(SharedPreferenceHelper.uidKey, String.valueOf(postResult.getAccount().getAccount_id()));
+                                    } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException
+                                            | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException
+                                            | InvalidKeySpecException | CertificateException | KeyStoreException
+                                            | IOException | NoSuchPaddingException e) {
+                                        e.printStackTrace();
+                                    }  catch (UnrecoverableKeyException e) {
+                                        e.printStackTrace();
+                                    } catch (BadPaddingException e) {
+                                        e.printStackTrace();
+                                    }
+
 
                                     Intent iHome = new Intent(DangNhapActivity.this, MainActivity.class);
-                                    iHome.putExtra("student",postResult.getAccount());
+                                    iHome.putExtra("student", postResult.getAccount());
                                     startActivity(iHome);
                                     finish();
                                     progressBar.setVisibility(View.GONE);
@@ -134,15 +155,14 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
-        if (backPressdTime+2000> System.currentTimeMillis())
-        {
+        if (backPressdTime + 2000 > System.currentTimeMillis()) {
             toast.cancel();//thoat thi huy toast
             super.onBackPressed();
             return;
 
 
-        }else {
-            toast = Toast.makeText(this,"Press back again to exit the app",Toast.LENGTH_SHORT);
+        } else {
+            toast = Toast.makeText(this, "Press back again to exit the app", Toast.LENGTH_SHORT);
             toast.show();
         }
 

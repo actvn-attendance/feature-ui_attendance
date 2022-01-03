@@ -1,29 +1,20 @@
 package com.example.attendanceqrcode.fragment;
 
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.AdapterRecyclerHistoryAttendance;
-import com.example.attendanceqrcode.adapter.AdapterRecyclerSubject;
 import com.example.attendanceqrcode.api.ApiService;
-import com.example.attendanceqrcode.model.HistoryAttendance;
 import com.example.attendanceqrcode.modelapi.HistoryAttendanceUser;
-import com.example.attendanceqrcode.modelapi.HistoryAttendances;
 import com.example.attendanceqrcode.modelapi.Subject;
+import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
+import com.example.attendanceqrcode.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +52,7 @@ public class HistoryAttendanceFragment extends Fragment {
 
     private void getHistoryAttendance(boolean progress,int id)
     {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
-        String token = sharedPref.getString("token", "");
+        String token = Utils.getToken(getContext());
 
         ApiService.apiService.getHistoryAttendance(token,id).enqueue(new Callback<List<HistoryAttendanceUser>>() {
             @Override

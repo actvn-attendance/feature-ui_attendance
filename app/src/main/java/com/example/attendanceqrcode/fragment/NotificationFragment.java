@@ -24,6 +24,8 @@ import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.model.Notification;
 import com.example.attendanceqrcode.modelapi.Notifications;
 import com.example.attendanceqrcode.modelapi.Subject;
+import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
+import com.example.attendanceqrcode.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,7 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
         getActivity().setTitle("Thông báo");
         recyclerView = view.findViewById(R.id.recyclerNotifi);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -54,37 +56,32 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.buttoncolor));
 
-        getNotigication(true);
+        getNotification(true);
 
         return view;
     }
 
-    private void getNotigication(Boolean progress)
-    {
+    private void getNotification(Boolean progress) {
         progressBar.setVisibility(View.GONE);
-        if (progress == true)
-        {
+        if (progress) {
             progressBar.setVisibility(View.VISIBLE);
         }
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
-        String token = sharedPref.getString("token", "");
 
-        ApiService.apiService.getNotification(token,1,20).enqueue(new Callback<Notifications>() {
+        if (!Utils.isInternetAvailable(getContext())) {
+            notifications = SharedPreferenceHelper.getObject(SharedPreferenceHelper.notificationsKey, Notifications.class);
+            setData();
+            return;
+        }
+
+        String token = Utils.getToken(getContext());
+
+        ApiService.apiService.getNotification(token, 1, 20).enqueue(new Callback<Notifications>() {
             @Override
             public void onResponse(Call<Notifications> call, Response<Notifications> response) {
-                if (response.code() == 200)
-                {
+                if (response.code() == 200) {
                     notifications = response.body();
-                    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_anim_up_to_down);
-                    recyclerView.setLayoutAnimation(animationController);
-
-                    adapterRecyclerNotifi = new AdapterRecyclerNotifi(notifications.getData(),getActivity(),NotificationFragment.this::clickItemNoti);
-                    linearLayoutManager = new LinearLayoutManager(getActivity());
-                    linearLayoutManager.setReverseLayout(true);
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setAdapter(adapterRecyclerNotifi);
-                    recyclerView.scrollToPosition(notifications.getData().size() - 1);
-                    progressBar.setVisibility(View.GONE);
+                    SharedPreferenceHelper.setObject(SharedPreferenceHelper.notificationsKey, notifications);
+                    setData();
                 }
             }
 
@@ -95,7 +92,20 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
         });
     }
 
+    private void setData() {
+        if (notifications != null) {
+            LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_anim_up_to_down);
+            recyclerView.setLayoutAnimation(animationController);
 
+            adapterRecyclerNotifi = new AdapterRecyclerNotifi(notifications.getData(), getActivity(), NotificationFragment.this::clickItemNoti);
+            linearLayoutManager = new LinearLayoutManager(getActivity());
+            linearLayoutManager.setReverseLayout(true);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setAdapter(adapterRecyclerNotifi);
+            recyclerView.scrollToPosition(notifications.getData().size() - 1);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
 
 
     @Override
@@ -106,7 +116,7 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
 
     @Override
     public void onRefresh() {
-        getNotigication(false);
+        getNotification(false);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -114,6 +124,6 @@ public class NotificationFragment extends Fragment implements AdapterRecyclerNot
                 swipeRefreshLayout.setRefreshing(false);//tat di
 
             }
-        },1500);
+        }, 1500);
     }
 }

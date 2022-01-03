@@ -1,8 +1,6 @@
 package com.example.attendanceqrcode.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +21,8 @@ import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.adapter.AdapterRecyclerSubject;
 import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.modelapi.Subject;
+import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
+import com.example.attendanceqrcode.utils.Utils;
 
 import java.util.List;
 
@@ -60,27 +60,22 @@ public class ClassFragment extends Fragment implements AdapterRecyclerSubject.Cl
     }
 
 
-
-    private void getInfo(boolean progress)
-    {
+    private void getInfo(boolean progress) {
         progressBar.setVisibility(View.GONE);
-        if (progress == true)
-        {
+        if (progress) {
             progressBar.setVisibility(View.VISIBLE);
         }
 
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
-        String token = sharedPref.getString("token", "");
+        String token = Utils.getToken(getContext());
 
         ApiService.apiService.getSubject(token).enqueue(new Callback<List<Subject>>() {
             @Override
             public void onResponse(Call<List<Subject>> call, Response<List<Subject>> response) {
-                if (response.code() == 200)
-                {
+                if (response.code() == 200) {
                     subjectList = response.body();
                     LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_right_to_left);
                     recyclerViewLopHoc.setLayoutAnimation(animationController);
-                    adapterRecyclerSubject = new AdapterRecyclerSubject(subjectList,getActivity(),ClassFragment.this::clickDetail);
+                    adapterRecyclerSubject = new AdapterRecyclerSubject(subjectList, getActivity(), ClassFragment.this::clickDetail);
                     recyclerViewLopHoc.setAdapter(adapterRecyclerSubject);
                     progressBar.setVisibility(View.GONE);
                 }
@@ -104,7 +99,7 @@ public class ClassFragment extends Fragment implements AdapterRecyclerSubject.Cl
                 swipeRefreshLayout.setRefreshing(false);//tat di
 
             }
-        },1500);
+        }, 1500);
     }
 
 

@@ -1,15 +1,9 @@
 package com.example.attendanceqrcode.adapter;
 
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.attendanceqrcode.R;
 import com.example.attendanceqrcode.model.ChatList;
 import com.example.attendanceqrcode.components.AppAlertDialog;
-import com.example.attendanceqrcode.model.GroupChat;
 import com.example.attendanceqrcode.model.MemberChatList;
 import com.example.attendanceqrcode.utils.Utils;
 
