@@ -21,9 +21,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.crypto.KeyGenerator;
@@ -43,10 +43,11 @@ public class KeyStoreWrapper {
         keyStore = createAndroidKeyStore();
     }
 
-    private KeyStore createAndroidKeyStore()
+    public KeyStore createAndroidKeyStore()
             throws KeyStoreException, CertificateException,
             NoSuchAlgorithmException, IOException {
         Log.d("KeyStoreWrapper", "====== createAndroidKeyStore() start =======");
+
         KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
         keyStore.load(null);
         Log.d("KeyStoreWrapper", "====== createAndroidKeyStore() done =======");
@@ -60,6 +61,7 @@ public class KeyStoreWrapper {
             throws NoSuchProviderException,
             NoSuchAlgorithmException,
             InvalidAlgorithmParameterException {
+
         Log.d("KeyStoreWrapper", "====== API level > 23 =======");
         Log.d("KeyStoreWrapper", "====== createAndroidKeyStoreSymmetricKey() start =======");
         KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
@@ -70,23 +72,31 @@ public class KeyStoreWrapper {
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7);
         keyGenerator.init(builder.build());
 
-        SecretKey secretKey =  keyGenerator.generateKey();
         Log.d("KeyStoreWrapper", "====== createAndroidKeyStoreSymmetricKey() done =======");
-
-        return  secretKey;
+        return keyGenerator.generateKey();
     }
 
 
     /**
      * @return symmetric key from Android Key Store or null if any key with given alias exists
      */
-    public SecretKey getAndroidKeyStoreSymmetricKey(String alias)
-            throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
+    public SecretKey getAndroidKeyStoreSymmetricKey(String alias) {
         Log.d("KeyStoreWrapper", "====== API level > 23 =======");
         Log.d("KeyStoreWrapper", "====== getAndroidKeyStoreSymmetricKey() start =======");
-        SecretKey secretKey = (SecretKey) keyStore.getKey(alias, null);
+
+        SecretKey secretKey = null;
+        try {
+            secretKey = (SecretKey) ((KeyStore.SecretKeyEntry) keyStore
+                    .getEntry(alias, null)).getSecretKey();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         Log.d("KeyStoreWrapper", "====== getAndroidKeyStoreSymmetricKey() done =======");
-        return  secretKey;
+        return secretKey;
     }
 
     public SecretKey generateDefaultSymmetricKey() throws NoSuchAlgorithmException {
@@ -136,7 +146,7 @@ public class KeyStoreWrapper {
             initGeneratorWithKeyPairGeneratorSpec(generator, alias);
         }
 
-        KeyPair keyPair =  generator.generateKeyPair();
+        KeyPair keyPair = generator.generateKeyPair();
         Log.d("KeyStoreWrapper", "====== createAndroidKeyStoreAsymmetricKey() done =======");
 
         return keyPair;

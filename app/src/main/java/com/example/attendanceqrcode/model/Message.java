@@ -1,5 +1,7 @@
 package com.example.attendanceqrcode.model;
 
+import android.util.Log;
+
 import com.example.attendanceqrcode.utils.AES.AESNormal;
 
 import java.util.Date;
@@ -14,13 +16,27 @@ public class Message {
     private String type;
     private String created;
 
-    public Message(HashMap mapMessage) {
-        this.message = (String) mapMessage.get("message");
+    public Message(HashMap mapMessage, String smsKey) {
+        System.out.println("symmetric key: "+smsKey);
+
         this.uid = (long) mapMessage.get("uid");
         this.fullName = (String) mapMessage.get("fullName");
         this.avatar = (String) mapMessage.get("avatar");
         this.type = (String) mapMessage.get("type");
         this.created = (String) mapMessage.get("created");
+
+        String content = (String) mapMessage.get("message");
+
+        if (smsKey != null && !smsKey.isEmpty()) {
+            String decrypted = AESNormal.decrypt(content, smsKey);
+            if (decrypted != null) {
+                this.message = decrypted;
+            } else {
+                this.message = content;
+            }
+        } else {
+            this.message = content;
+        }
     }
 
     public Message(String smsPrivateKey, long uid, String fullName, String message, String type) {
@@ -51,7 +67,7 @@ public class Message {
         if (smsPrivateKey != null && !smsPrivateKey.isEmpty()) {
             try {
                 return AESNormal.decrypt(message, smsPrivateKey);
-            }catch (Exception e){
+            } catch (Exception e) {
                 return message;
             }
         } else {

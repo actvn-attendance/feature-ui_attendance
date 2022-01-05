@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.example.attendanceqrcode.api.ApiService;
 import com.example.attendanceqrcode.middleware.BaseActivity;
+import com.example.attendanceqrcode.modelapi.Account;
 import com.example.attendanceqrcode.modelapi.InfoUser;
 import com.example.attendanceqrcode.modelapi.User;
 import com.example.attendanceqrcode.utils.SharedPreferenceHelper;
@@ -33,6 +34,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
@@ -174,35 +176,40 @@ public class DangNhapActivity extends BaseActivity implements View.OnClickListen
             SharedPreferenceHelper.encryptAndSetData(SharedPreferenceHelper.accountKey, postResult.getAccount().toJsonString());
             SharedPreferenceHelper.set(SharedPreferenceHelper.uidKey, String.valueOf(postResult.getAccount().getAccount_id()));
 
-            // sync public key to firebase
-            syncPublicKeyUserToFirebase(postResult.getAccount().getAccount_id());
+            // generate private key and sync public key to firebase
+            generatePublicAndPrivateKey(postResult.getAccount());
         } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException
-                | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException
-                | InvalidKeySpecException | CertificateException | KeyStoreException
-                | IOException | NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+                | NoSuchProviderException
+                | CertificateException | KeyStoreException
+                | IOException e) {
             e.printStackTrace();
         }
     }
 
-    void syncPublicKeyUserToFirebase(int uid) {
+    void generatePublicAndPrivateKey(Account account) {
+        DiffieHellman diffieHellman = new DiffieHellman(getApplicationContext());
+        diffieHellman.generatePrivateKey(account.getPassword());
+
         userPublicKeysDB = FirebaseDatabase.getInstance().getReference().child("userPublicKeys");
         userPublicKeysDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (!snapshot.hasChild(String.valueOf(uid))) {
+                if (!snapshot.hasChild(String.valueOf(account.getAccount_id()))) {
                     Map<String, Object> postValues = new HashMap<>();
 
-                    postValues.put("id", uid);
-                    postValues.put("publicKey", new DiffieHellman().generatePublicKey());
-                    postValues.put("createAt", new Date().getTime());
+                    postValues.put("id", account.getAccount_id());
 
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/" + uid, postValues);
-                    userPublicKeysDB.updateChildren(childUpdates);
+                    int publicKey = diffieHellman.generatePublicKey();
+                    if (publicKey > -1) {
+                        postValues.put("publicKey",
+                                publicKey);
+                        postValues.put("createAt", new Date().getTime());
+
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put("/" + account.getAccount_id(), postValues);
+                        userPublicKeysDB.updateChildren(childUpdates);
+                    }
+
                 }
             }
 

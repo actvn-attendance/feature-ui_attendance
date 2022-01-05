@@ -75,14 +75,14 @@ public class ChatDetailActivity extends BaseActivity {
     private boolean isFirst = true;
 
     private String smsPrivateKey = "";
-    private DiffieHellman diffieHellman = new DiffieHellman();
+    private DiffieHellman diffieHellman;
 
     ChildEventListener chatListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             if (dataSnapshot.getValue() != null) {
                 HashMap mapMessage = (HashMap) dataSnapshot.getValue();
-                Message newMessage = new Message(mapMessage);
+                Message newMessage = new Message(mapMessage, smsPrivateKey);
                 messageList.add(newMessage);
                 messageAdapter.notifyDataSetChanged();
 
@@ -115,6 +115,7 @@ public class ChatDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_detail);
+
         account = (Account) getIntent().getSerializableExtra("chat");
         if (this.fullName == null)
             this.fullName = Utils.getUserFullName(this);
@@ -124,11 +125,12 @@ public class ChatDetailActivity extends BaseActivity {
             this.chatID = Utils.getPersonalID(this, account.getAccount_id());
         }
 
+        diffieHellman = new DiffieHellman(getApplicationContext());
+
         personalChatDB = FirebaseDatabase.getInstance().getReference()
                 .child("personalChat")
                 .child(chatID)
                 .child("messages");
-        personalChatDB.addChildEventListener(chatListener);
 
         meChatListDB = FirebaseDatabase.getInstance().getReference().child("userChatList").child(String.valueOf(uid));
         userChatListDB = FirebaseDatabase.getInstance().getReference().child("userChatList").child(String.valueOf(account.getAccount_id()));
@@ -158,10 +160,11 @@ public class ChatDetailActivity extends BaseActivity {
                 if (snapshot.getValue() != null) {
                     HashMap mapMessage = (HashMap) snapshot.getValue();
                     try {
-                        int publicKeyUser = (int) mapMessage.get("publicKey");
-                        smsPrivateKey = diffieHellman.generateKey(publicKeyUser);
+                        long publicKeyUser = (long) mapMessage.get("publicKey");
+                        smsPrivateKey = diffieHellman.generateSymmetricKey(publicKeyUser);
+                        personalChatDB.addChildEventListener(chatListener);
                     } catch (Exception e) {
-
+                        System.out.println(e.toString());
                     }
 
                 }

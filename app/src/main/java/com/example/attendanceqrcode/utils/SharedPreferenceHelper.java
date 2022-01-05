@@ -2,6 +2,7 @@ package com.example.attendanceqrcode.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.attendanceqrcode.utils.secure.SecureServices;
 import com.google.gson.Gson;
@@ -13,6 +14,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
@@ -22,7 +24,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class SharedPreferenceHelper {
-    private static String key = "Account";
+    private static String key = "ACTVN";
     public static String tokenKey = "token";
     public static String usernameKey = "username";
     public static String passwordKey = "password";
@@ -31,7 +33,8 @@ public class SharedPreferenceHelper {
     public static String accountKey = "account";
     public static String notificationsKey = "notifications";
 
-    public static String secretKey = "secretKey";
+    public static String masterKey = "masterKey";
+    public static String privateKey = "privateKey";
 
     private static SharedPreferences sharedPreferences;
     private static Context context;
@@ -39,7 +42,7 @@ public class SharedPreferenceHelper {
     private static volatile SharedPreferenceHelper instance;
 
     // Private constructor to avoid client applications to use constructor
-    private SharedPreferenceHelper(Context context) {
+    public SharedPreferenceHelper(Context context) {
         this.context = context;
         sharedPreferences = context.getSharedPreferences(key, Context.MODE_PRIVATE);
     }
@@ -57,9 +60,7 @@ public class SharedPreferenceHelper {
         try {
             encryptAndSetData(key, json);
         } catch (CertificateException | NoSuchAlgorithmException | KeyStoreException
-                | IOException | NoSuchPaddingException | UnrecoverableKeyException
-                | IllegalBlockSizeException | BadPaddingException
-                | InvalidAlgorithmParameterException | InvalidKeyException e) {
+                | IOException e) {
             e.printStackTrace();
         }
     }
@@ -74,16 +75,16 @@ public class SharedPreferenceHelper {
                 | IllegalBlockSizeException | BadPaddingException
                 | InvalidAlgorithmParameterException | InvalidKeyException e) {
             e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
         }
-        System.out.println(json);
+        Log.e("Get object: ", json);
         T obj = gson.fromJson(json, (Type) className);
         return obj;
     }
 
     public static <T> void setList(String key, List<T> list)
-            throws IOException, CertificateException, NoSuchAlgorithmException,
-            UnrecoverableKeyException, InvalidKeyException, InvalidAlgorithmParameterException,
-            NoSuchPaddingException, BadPaddingException, KeyStoreException, IllegalBlockSizeException {
+            throws IOException, CertificateException, NoSuchAlgorithmException,KeyStoreException {
         Gson gson = new Gson();
         String json = gson.toJson(list);
 
@@ -108,11 +109,19 @@ public class SharedPreferenceHelper {
         editor.apply();
     }
 
+    public static void setBoolean(String key, boolean value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    public static boolean getBoolean(String key) {
+        return sharedPreferences.getBoolean(key, false);
+    }
+
     public static void encryptAndSetData(String key, String value)
             throws CertificateException, NoSuchAlgorithmException,
-            KeyStoreException, IOException, NoSuchPaddingException, UnrecoverableKeyException,
-            IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException,
-            InvalidKeyException {
+            KeyStoreException, IOException {
         String dataEncrypted = new SecureServices(context).encrypt(value);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -122,14 +131,13 @@ public class SharedPreferenceHelper {
 
     public static String getDataEncrypted(String key)
             throws CertificateException, NoSuchAlgorithmException, KeyStoreException,
-            IOException, NoSuchPaddingException, UnrecoverableKeyException,
+            IOException, NoSuchPaddingException, UnrecoverableEntryException,
             IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException,
             InvalidKeyException {
         String value = sharedPreferences.getString(key, null);
 
         if (value != null) {
-            String result = new SecureServices(context).decrypt(value);
-            return result;
+            return new SecureServices(context).decrypt(value);
         }
         return "";
     }
@@ -140,7 +148,8 @@ public class SharedPreferenceHelper {
     }
 
     public static int getInt(String key) {
-        return sharedPreferences.getInt(key, -1);
+        String result = sharedPreferences.getString(key, "-1");
+        return Integer.parseInt(result);
     }
 
     public static void clearData() {

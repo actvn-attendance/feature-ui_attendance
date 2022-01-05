@@ -36,34 +36,31 @@ public class AESWithSalt {
         SharedPreferenceHelper.getInstance(context);
     }
 
+    public SecretKey getSecretKeyFromRawKey(String rawKey){
+        byte[] keyEncoded = Base64.decode(rawKey, Base64.DEFAULT);
+        return new SecretKeySpec(keyEncoded, "AES");
+    }
+
     /// generate aes key with input text + salt
-    public SecretKey generateAESKey(String input) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public SecretKey generateAESKey(String input) {
         PBEKeySpec pbeKeySpec = new PBEKeySpec(input.toCharArray(),
                 salt, NUM_OF_ITERATIONS, KEY_SIZE);
         SecretKeyFactory keyFactory;
         try {
             keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
             SecretKey tempKey = keyFactory.generateSecret(pbeKeySpec);
-            SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
-            SharedPreferenceHelper.set(
-                    SharedPreferenceHelper.secretKey,
-                    Base64.encodeToString(secretKey.getEncoded(), Base64.DEFAULT));
-            return secretKey;
+            return new SecretKeySpec(tempKey.getEncoded(), "AES");
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw e;
+            return null;
         }
     }
 
-    public String encrypt(String clearText)
-            throws IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
+    public String encrypt(String rawKey, String clearText) {
         Cipher encCipher;
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
         try {
-            String rawData = SharedPreferenceHelper.get(SharedPreferenceHelper.secretKey);
-            byte[] keyEncoded = Base64.decode(rawData, Base64.DEFAULT);
-            SecretKey secretKey = new SecretKeySpec(keyEncoded, "AES");
+            SecretKey secretKey = getSecretKeyFromRawKey(rawKey);
 
             encCipher = Cipher.getInstance(CIPHER_ALGORITHM);
             encCipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
@@ -74,19 +71,15 @@ public class AESWithSalt {
                 | IllegalBlockSizeException
                 | InvalidAlgorithmParameterException
                 | InvalidKeyException e) {
-            throw e;
+            return null;
         }
     }
 
-    public String decrypt(String encryptedData)
-            throws IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
+    public String decrypt(String rawKey, String encryptedData) {
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
         try {
-            String rawData = SharedPreferenceHelper.get(SharedPreferenceHelper.secretKey);
-            byte[] keyEncoded = Base64.decode(rawData, Base64.DEFAULT);
-            SecretKey secretKey = new SecretKeySpec(keyEncoded, "AES");
+            SecretKey secretKey = getSecretKeyFromRawKey(rawKey);
 
             Cipher decCipher = Cipher.getInstance(CIPHER_ALGORITHM);
             decCipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
@@ -100,7 +93,7 @@ public class AESWithSalt {
                 | IllegalBlockSizeException
                 | InvalidAlgorithmParameterException
                 | InvalidKeyException e) {
-            throw e;
+            return null;
         }
     }
 }

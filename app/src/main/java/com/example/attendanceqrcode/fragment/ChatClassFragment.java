@@ -84,7 +84,7 @@ public class ChatClassFragment extends Fragment {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             if (dataSnapshot.getValue() != null) {
                 HashMap mapMessage = (HashMap) dataSnapshot.getValue();
-                Message newMessage = new Message(mapMessage);
+                Message newMessage = new Message(mapMessage, null);
                 messageList.add(newMessage);
                 messageAdapter.notifyDataSetChanged();
 
@@ -200,7 +200,7 @@ public class ChatClassFragment extends Fragment {
                 taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(task -> {
                     // success
                     String fileLink = task.getResult().toString();
-                    writeNewMessage(new Message(uid, fullName, fileLink, "image"));
+                    writeNewMessage(new Message(null, uid, fullName, fileLink, "image"));
                 });
                 progressDialog.dismiss();
                 sendImageSuccess();
@@ -210,7 +210,7 @@ public class ChatClassFragment extends Fragment {
             if (TextUtils.isEmpty(message)) {
                 return;
             }
-            writeNewMessage(new Message(uid, fullName, message, "text"));
+            writeNewMessage(new Message(null, uid, fullName, message, "text"));
 
             edtMessage.setText("");
         }

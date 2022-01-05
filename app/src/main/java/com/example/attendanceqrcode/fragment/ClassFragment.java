@@ -73,8 +73,8 @@ public class ClassFragment extends Fragment implements AdapterRecyclerSubject.Cl
             public void onResponse(Call<List<Subject>> call, Response<List<Subject>> response) {
                 if (response.code() == 200) {
                     subjectList = response.body();
-                    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_right_to_left);
-                    recyclerViewLopHoc.setLayoutAnimation(animationController);
+//                    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_right_to_left);
+//                    recyclerViewLopHoc.setLayoutAnimation(animationController);
                     adapterRecyclerSubject = new AdapterRecyclerSubject(subjectList, getActivity(), ClassFragment.this::clickDetail);
                     recyclerViewLopHoc.setAdapter(adapterRecyclerSubject);
                     progressBar.setVisibility(View.GONE);

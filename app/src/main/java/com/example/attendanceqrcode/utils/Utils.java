@@ -26,6 +26,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.Timestamp;
@@ -83,6 +84,8 @@ public class Utils {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -115,6 +118,8 @@ public class Utils {
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
             e.printStackTrace();
         }
         return "";
@@ -188,6 +193,8 @@ public class Utils {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
         }
 
         if (json != null && !json.isEmpty()) {
@@ -230,5 +237,16 @@ public class Utils {
 
         return connectivityManager.getActiveNetworkInfo() != null
                 && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    public static boolean isFirstRun(Context context) {
+        SharedPreferenceHelper.getInstance(context);
+
+        if (SharedPreferenceHelper.getBoolean("first_time")) {
+            SharedPreferenceHelper.setBoolean("first_time", false);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

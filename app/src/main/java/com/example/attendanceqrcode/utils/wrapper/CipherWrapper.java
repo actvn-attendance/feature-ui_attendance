@@ -7,11 +7,13 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
 import kotlin.text.Charsets;
@@ -29,7 +31,7 @@ public class CipherWrapper {
         this.cipher = Cipher.getInstance(transformation);
     }
 
-    public final String encrypt(String data, Key key)
+    public final String encrypt(String data, SecretKey key)
             throws InvalidKeyException, BadPaddingException,
             IllegalBlockSizeException {
         Log.d("CipherWrapper", "====== encrypt with secret key start=======");
@@ -54,10 +56,11 @@ public class CipherWrapper {
         return result;
     }
 
-    public final String decrypt(String data, Key key)
+    public final String decrypt(String data, SecretKey key)
             throws InvalidKeyException, BadPaddingException,
             IllegalBlockSizeException, InvalidAlgorithmParameterException {
         Log.d("CipherWrapper", "====== decrypt with secret key start=======");
+
         boolean useInitializationVector = true;
         String encodedString;
 
