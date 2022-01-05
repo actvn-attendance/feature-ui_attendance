@@ -46,7 +46,6 @@ public class CipherWrapper {
             result = ivString + IV_SEPARATOR;
         }
 
-
         byte[] bytes = cipher.doFinal(data.getBytes());
         result += Base64.encodeToString(bytes, Base64.DEFAULT);
 

@@ -1,9 +1,6 @@
 package com.example.attendanceqrcode.utils.AES;
 
 import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

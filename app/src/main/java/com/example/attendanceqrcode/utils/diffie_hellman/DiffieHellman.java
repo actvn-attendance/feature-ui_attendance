@@ -25,7 +25,6 @@ public class DiffieHellman {
 
     public boolean generatePrivateKey(String userPassword) {
         SecretKey privateKey = aesWithSalt.generateAESKey(userPassword);
-        System.out.println(">>> generatePrivateKey: "+privateKey.getEncoded());
         SharedPreferenceHelper.set(
                 SharedPreferenceHelper.privateKey,
                 Base64.encodeToString(privateKey.getEncoded(), Base64.DEFAULT));
@@ -43,12 +42,17 @@ public class DiffieHellman {
         return null;
     }
 
+    // s = B^a mod p
+    // B: public key B
+    // a: private key A
+    // p: snt
+    // return: key đối xứng -> key này để áp dụng vào thuật toán AES
+    // MD5 hash key
     public String generateSymmetricKey(long publicB) {
         SecretKey secretKey = getPrivateKey();
         if (secretKey != null) {
             BigInteger privateKey = new BigInteger(secretKey.getEncoded());
             try {
-                BigInteger b = new BigInteger(String.valueOf(publicB));
                 BigInteger result = new BigInteger(String.valueOf(publicB)).modPow(privateKey, MOD);
                 return MD5.md5(String.valueOf(result.intValue()));
             } catch (Exception e) {
@@ -60,6 +64,10 @@ public class DiffieHellman {
 
     }
 
+    /// A = g^a mod p
+    // a: private a
+    // g: căn nguyên thủy
+    // p: snt
     public int generatePublicKey() {
         SecretKey secretKey = getPrivateKey();
         if (secretKey != null) {
